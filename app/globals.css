@@ -1,26 +1,129 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --white: #ffffff;
+  --black: #171717;
+  --wheat: #F5F0E5;
+  --green: #4A6F44;
+  --brown: #A67C52;
+  --gray: #756861;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--white);
+  --color-foreground: var(--black);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+
+.green-btn {
+  @apply py-2 px-4 bg-[var(--green)] text-[var(--white)] rounded-sm
+}
+
+.white-btn {
+  @apply py-2 px-4 bg-[var(--white)] text-[var(--green)] rounded-sm
+}
+
+.text-nadpis {
+  @apply text-4xl text-[var(--black)]
+}
+
+.text-podnadpis {
+  @apply text-base text-[var(--gray)]
+}
+
+.center-text {
+  @apply flex flex-col text-center
+}
+
+.width-page {
+  @apply max-w-7xl mx-auto px-5
+}
+
+.width-p-page {
+  @apply max-w-7xl mx-auto py-20 px-5
+}
+
+.card-nase {
+  @apply rounded-lg bg-[var(--white)] p-8 space-y-2 border-t-4 border-[var(--brown)] shadow-sm flex-1/3
+}
+
+.nase-nadpis {
+  @apply font-bold text-base text-[var(--black)]
+}
+
+.nase-podnadpis {
+  @apply text-base text-[var(--gray)]
+}
+
+.card-speciality {
+  @apply rounded-lg bg-[var(--wheat)] p-8 space-y-2 shadow-sm flex-1/3
+}
+
+.kontaktuje-nadpis {
+  @apply font-bold text-4xl text-[var(--white)]
+}
+
+.kontaktuje-podnadpis {
+  @apply text-base text-[var(--white)]
+}
+
+.header-card-nav {
+  @apply pt-37 pb-20 bg-[var(--brown)] space-y-5 px-2
+}
+
+.header-card-nadpis {
+  @apply text-7xl text-[var(--white)]
+}
+
+.header-card-podnadpis {
+  @apply text-xl text-[var(--white)] max-w-2xl mx-auto
+}
+
+.button-menu {
+  @apply px-5 py-2 text-[var(--gray)] hover:text-[var(--black)]
+}
+
+/* NOVÁ TŘÍDA pro aktivní tlačítko v menu */
+.button-menu-active {
+  @apply font-semibold text-[var(--brown)] border-b-2 border-[var(--brown)]
+}
+
+/* NOVÁ TŘÍDA pro kartu s jídlem podle vašeho obrázku */
+.jidlo-karta {
+  @apply bg-transparent p-5 border border-stone-300 rounded-lg
+}
+
+.footer-card {
+  @apply flex-1/4 p-5
+}
+
+.footer-nadpis {
+  @apply font-semibold text-lg mb-2
+}
+
+.footer-podnadpis {
+  @apply flex flex-row gap-2 mb-2 text-sm
+}
+
+.footer-podnadpis-without {
+  @apply mb-2 text-sm
+}
+
+.kontakt-podnadpis {
+  @apply flex flex-row gap-2 mb-2 text-base items-center
+}
+
+.kontakt-nadpis {
+  @apply font-semibold text-2xl mb-2
 }
