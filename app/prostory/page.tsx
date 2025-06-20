@@ -75,11 +75,6 @@ const page = () => {
                       href='/kontakt'
                       containerStyles='brown-btn'
               />
-              <CustomHeaderButtons 
-                      title='Rezervační formulář'
-                      href='/kontakt'
-                      containerStyles='brown-white-btn'
-              />
             </div>
           </div>
         </div>

@@ -43,11 +43,11 @@ body {
 }
 
 .text-nadpis {
-  @apply text-4xl text-[var(--black)]
+  @apply text-2xl md:text-4xl text-[var(--black)] font-bold
 }
 
 .text-podnadpis {
-  @apply text-base text-[var(--gray)]
+  @apply text-sm md:text-base text-[var(--gray)]
 }
 
 .center-text {
@@ -91,11 +91,11 @@ body {
 }
 
 .header-card-nadpis {
-  @apply text-7xl text-[var(--white)]
+  @apply text-5xl md:text-7xl text-[var(--white)]
 }
 
 .header-card-podnadpis {
-  @apply text-xl text-[var(--white)] max-w-2xl mx-auto
+  @apply text-base md:text-xl text-[var(--white)] max-w-2xl mx-auto
 }
 
 .button-menu {

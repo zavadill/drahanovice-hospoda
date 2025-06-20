@@ -30,7 +30,7 @@ const page = () => {
                 </div>
                 <CustomHeaderButtons 
                   title='Nezávazná konzultace'
-                  href=''
+                  href='/kontakt'
                   containerStyles='green-btn'
                 />
               </div>
@@ -63,7 +63,7 @@ const page = () => {
                 </ul>
                 <CustomHeaderButtons 
                   title='Rezervovat termín'
-                  href=''
+                  href='/kontakt'
                   containerStyles='green-btn'
                 />
               </div>
@@ -73,8 +73,8 @@ const page = () => {
         <div className='bg-[var(--white)]'>
           <div className='width-p-page'>
             <div className='center-text pb-20'>
-              <h5>Firemní akce</h5>
-              <p>Teambuildingy, školení, firemní večírky</p>
+              <h5 className='text-nadpis'>Firemní akce</h5>
+              <p className='text-podnadpis'>Teambuildingy, školení, firemní večírky</p>
             </div>
             <div className='space-y-10 flex flex-col'>
               <p className='max-w-2xl mx-auto center-text'>Hostinec Na Nové nabízí ideální prostory pro pořádání různých typů firemních akcí - od pracovních obědů a školení, přes teambuildingy až po firemní večírky a oslavy.</p>
@@ -97,7 +97,7 @@ const page = () => {
               </div>
               <CustomHeaderButtons 
                   title='Nezávazná poptávka'
-                  href=''
+                  href='/kontakt'
                   containerStyles='green-btn mx-auto'
                 />
             </div>
@@ -111,7 +111,7 @@ const page = () => {
             </div>
             <div className="overflow-x-auto p-5 md:p-10 bg-[var(--white)] rounded-xl shadow-sm">
               <table className="min-w-full text-left border-separate border-spacing-y-3">
-                <thead className="text-base font-semibold text-[var(--black)]">
+                <thead className="text-sm md:text-base font-semibold text-[var(--black)]">
                   <tr className='border-2 border-black'>
                     <th className="pb-3">Typ akce</th>
                     <th className="pb-3">Malý salonek</th>
@@ -184,11 +184,6 @@ const page = () => {
                       title='+420 585 949 482'
                       href='/kontakt'
                       containerStyles='brown-btn'
-              />
-              <CustomHeaderButtons 
-                      title='Kontaktní formulář'
-                      href='/kontakt'
-                      containerStyles='brown-white-btn'
               />
             </div>
           </div>

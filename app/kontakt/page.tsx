@@ -74,12 +74,12 @@ const page = () => {
               <div className='flex flex-row space-x-5 max-w-2xl mx-auto w-full '>
                     <CustomHeaderButtons 
                         title='Zavolat nám'
-                        href='/menu'
+                        href='tel:+420 585 949 482'
                         containerStyles='green-btn'
                     />
                     <CustomHeaderButtons 
                         title='Napsat e-mail'
-                        href='/kontakt'
+                        href='mailto:hostinecnanove@seznam.cz'
                         containerStyles='white-btn'
                     />
               </div>
