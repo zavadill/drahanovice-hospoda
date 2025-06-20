@@ -34,6 +34,14 @@ body {
   @apply py-2 px-4 bg-[var(--white)] text-[var(--green)] rounded-sm
 }
 
+.brown-btn {
+  @apply py-2 px-4 bg-[var(--white)] text-[var(--brown)] rounded-sm
+}
+
+.brown-white-btn {
+  @apply py-2 px-4 bg-[var(--brown)] text-[var(--white)] rounded-sm border-[var(--white)] border-2
+}
+
 .text-nadpis {
   @apply text-4xl text-[var(--black)]
 }
