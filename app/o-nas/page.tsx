@@ -1,4 +1,5 @@
 import React from 'react'
+import ClientRevealTwo from '../components/ClientRevealTwo';
 
 const historieData = [
   {
@@ -75,6 +76,7 @@ const tymData = [
 const page = () => {
   return (
     <div>
+      <ClientRevealTwo selector=".card-team">
         <div className='header-card-nav center-text'>
             <h1 className='header-card-nadpis'>O nás</h1>
             <h2 className='header-card-podnadpis'>Poznejte historii a příběh Hostince na Nové, tradičního českého pohostinství s bohatou historií sahající až do roku 1762.</h2>
@@ -93,7 +95,7 @@ const page = () => {
               {historieData.map((item, index) => (
                 <div
                   key={index}
-                  className='border-l-4 border-[var(--brown)] shadow-sm p-2 rounded-lg flex flex-row justify-between items-center'
+                  className= 'card-team border-l-4 border-[var(--brown)] shadow-sm p-2 rounded-lg flex flex-row justify-between items-center'
                 >
                   <div>
                     <p className='nase-nadpis'>{item.nadpis}</p>
@@ -109,7 +111,7 @@ const page = () => {
         <div className='bg-[var(--wheat)]'>
           <div className='width-p-page flex flex-col md:flex-row gap-5'>
             {tymData.map((clen, index) => (
-              <div key={index} className='space-y-2 p-5 bg-[var(--white)] center-text rounded-lg shadow-sm'>
+              <div key={index} className='space-y-2 p-5 bg-[var(--white)] center-text rounded-lg shadow-sm card-team'>
                 <img className='mx-auto border-4 border-[var(--green)] rounded-full border-2 w-30 h-30 flex justify-center items-center' src={clen.obrazek} alt={clen.jmeno} />
                 <p className='font-semibold text-xl'>{clen.jmeno}</p>
                 <p className='text-[var(--green)]'>{clen.pozice}</p>
@@ -118,6 +120,7 @@ const page = () => {
             ))}
           </div>
         </div>
+      </ClientRevealTwo>
     </div>
   )
 }
