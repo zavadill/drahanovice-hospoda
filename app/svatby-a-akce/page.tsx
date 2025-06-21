@@ -1,9 +1,11 @@
 import React from 'react'
 import CustomHeaderButtons from '../components/CustomHeaderButtons'
+import ClientRevealTwo from '../components/ClientRevealTwo'
 
 const page = () => {
   return (
     <div>
+      <ClientRevealTwo selector=".firemni-card">
         <div className='header-card-nav center-text'>
             <h1 className='header-card-nadpis'>Prostory a akce</h1>
             <h2 className='header-card-podnadpis'>Kompletní zajištění svateb, rodinných oslav a firemních akcí na míru.</h2>
@@ -79,17 +81,17 @@ const page = () => {
             <div className='space-y-10 flex flex-col'>
               <p className='max-w-2xl mx-auto center-text'>Hostinec Na Nové nabízí ideální prostory pro pořádání různých typů firemních akcí - od pracovních obědů a školení, přes teambuildingy až po firemní večírky a oslavy.</p>
               <div className='flex flex-col md:flex-row gap-10'>
-                <div className='p-5 border-t-4 border-[var(--brown)] rounded-xl flex-1/3 space-y-2 shadow-sm'>
+                <div className='p-5 border-t-4 border-[var(--brown)] rounded-xl flex-1/3 space-y-2 shadow-sm firemni-card'>
                   <img src="" alt="" className='h-50 w-full rounded-xl' />
                   <p className='nase-nadpis'>Pracovní obědy a večeře</p>
                   <p className='nase-podnadpis'>Klidné prostředí pro obchodní jednání s partnerem či klientem při kvalitním jídle a pití.</p>
                 </div>
-                <div className='p-5 border-t-4 border-[var(--brown)] rounded-xl flex-1/3 space-y-2 shadow-sm'>
+                <div className='p-5 border-t-4 border-[var(--brown)] rounded-xl flex-1/3 space-y-2 shadow-sm firemni-card'>
                   <img src="" alt="" className='h-50 w-full rounded-xl' />
                   <p className='nase-nadpis'>Pracovní obědy a večeře</p>
                   <p className='nase-podnadpis'>Klidné prostředí pro obchodní jednání s partnerem či klientem při kvalitním jídle a pití.</p>
                 </div>
-                <div className='p-5 border-t-4 border-[var(--brown)] rounded-xl flex-1/3 space-y-2 shadow-sm'>
+                <div className='p-5 border-t-4 border-[var(--brown)] rounded-xl flex-1/3 space-y-2 shadow-sm firemni-card'>
                   <img src="" alt="" className='h-50 w-full rounded-xl' />
                   <p className='nase-nadpis'>Pracovní obědy a večeře</p>
                   <p className='nase-podnadpis'>Klidné prostředí pro obchodní jednání s partnerem či klientem při kvalitním jídle a pití.</p>
@@ -188,6 +190,7 @@ const page = () => {
             </div>
           </div>
         </div>
+      </ClientRevealTwo>
     </div>
   )
 }
