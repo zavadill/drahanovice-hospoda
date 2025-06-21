@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Playfair_Display, Inter } from "next/font/google";
+import ClientReveal from "./components/ClientReveal";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -30,7 +31,13 @@ export default function RootLayout({
     <html lang="cs" className={`${playfair.variable} ${inter.variable}`}>
       <body className="antialiased">
         <Navbar />
-        {children}
+        {/* Obalíme celý obsah do ClientReveal */}
+        <ClientReveal selector=".reveal">
+          {/* Přidej třídu 'reveal' do kontejneru, kam chceš animaci */}
+          <div className="reveal">
+            {children}
+          </div>
+        </ClientReveal>
         <Footer />
       </body>
     </html>

@@ -1,38 +1,51 @@
 'use client';
 
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePathname } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(useGSAP);
 
-type ClientRevealProps = {
+interface ClientRevealProps {
   children: React.ReactNode;
-  selector: string; // např. ".card-speciality"
-};
+  selector: string;
+}
 
 export default function ClientReveal({ children, selector }: ClientRevealProps) {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
-  useGSAP(() => {
-    gsap.fromTo(
-      selector,
-      { opacity: 0, y: 40 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top 85%',
-        },
-      }
-    );
-  }, { scope: containerRef });
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Vyčistit staré ScrollTrigger instance, aby se nepřekrývaly
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        selector,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.15,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }, containerRef);
+
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, [selector, pathname]); // Závislost na pathname, takže animace se spustí znovu po každé změně URL
 
   return <div ref={containerRef}>{children}</div>;
 }
