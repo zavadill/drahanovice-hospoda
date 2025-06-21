@@ -1,10 +1,10 @@
 import { Utensils, Users, Calendar } from 'lucide-react';
-import ClientReveal from './ClientReveal';
+import ClientRevealTwo from './ClientRevealTwo';
 
 export default function Nase() {
   return (
     <div className='bg-[var(--wheat)]'>
-      <ClientReveal selector=".card-nase">
+      <ClientRevealTwo selector=".card-nase">
         <div className='width-p-page'>
           <div className='center-text'>
             <h3 className='text-nadpis pb-20'>Naše služby</h3>
@@ -39,7 +39,7 @@ export default function Nase() {
             </div>
           </div>
         </div>
-      </ClientReveal>
+      </ClientRevealTwo>
     </div>
   );
 }

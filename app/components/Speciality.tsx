@@ -1,9 +1,9 @@
-import ClientReveal from './ClientReveal';
+import ClientRevealTwo from './ClientRevealTwo';
 import CustomSpecialityButton from './CustomSpecialityButton';
 
 export default function Speciality() {
   return (
-    <ClientReveal selector=".card-speciality">
+    <ClientRevealTwo selector=".card-speciality">
       <div className='width-p-page'>
         <div className='center-text pb-20'>
           <h3 className='text-nadpis'>Speciality našeho hostince</h3>
@@ -30,6 +30,6 @@ export default function Speciality() {
           </div>
         </div>
       </div>
-    </ClientReveal>
+    </ClientRevealTwo>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import React, { useState } from 'react';
+import ClientRevealTwo from './ClientRevealTwo';
 
 const menuData = [
     { id: 1, kategorie: 'Předkrmy', nazev: 'Škvarková pomazánka', popis: 'Domácí škvarková pomazánka s chlebem a cibulí', cena: 85, alergeny: '1, 3' },
@@ -27,49 +27,39 @@ const menuData = [
 const kategorieList = ['Předkrmy', 'Polévky', 'Hlavní jídla', 'Dezerty', 'Nápoje'];
 
 const JidelniListek = () => {
-  const [aktivniKategorie, setAktivniKategorie] = useState('Hlavní jídla');
-  const filtrovanaJidla = menuData.filter(jidlo => jidlo.kategorie === aktivniKategorie);
-  const containerRef = useRef<HTMLDivElement>(null);
+    const [aktivniKategorie, setAktivniKategorie] = useState('Hlavní jídla');
+    const filtrovanaJidla = menuData.filter(jidlo => jidlo.kategorie === aktivniKategorie);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    // GSAP animace na karty jídla při mountu a změně kategorie
-    gsap.fromTo(
-      containerRef.current.querySelectorAll('.jidlo-karta'),
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power2.out' }
-    );
-  }, [aktivniKategorie]);
-
-  return (
-    <div className='py-20'>
-      <div className='flex flex-col justify-center md:flex-row'>
-        {kategorieList.map((kat) => (
-          <button
-            key={kat}
-            className={`button-menu ${aktivniKategorie === kat ? 'button-menu-active' : ''}`}
-            onClick={() => setAktivniKategorie(kat)}
-          >
-            {kat}
-          </button>
-        ))}
-      </div>
-
-      <div ref={containerRef} className="m-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-        {filtrovanaJidla.map((jidlo) => (
-          <div key={jidlo.id} className="jidlo-karta">
-            <div className="flex justify-between items-start">
-              <p className="text-xl font-semibold text-[var(--black)]">{jidlo.nazev}</p>
-              <p className="text-xl font-semibold text-[var(--brown)]">{jidlo.cena} Kč</p>
+    return (
+        <div className="py-20">
+            <div className="flex flex-col justify-center md:flex-row">
+                {kategorieList.map((kat) => (
+                    <button
+                        key={kat}
+                        className={`button-menu ${aktivniKategorie === kat ? 'button-menu-active' : ''}`}
+                        onClick={() => setAktivniKategorie(kat)}
+                    >
+                        {kat}
+                    </button>
+                ))}
             </div>
-            <p className="mt-1 text-base text-[var(--gray)]">{jidlo.popis}</p>
-            <p className="text-sm text-[var(--gray)]/80 mt-4">Alergeny: {jidlo.alergeny}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+
+            <ClientRevealTwo selector=".jidlo-karta">
+                <div className="m-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    {filtrovanaJidla.map((jidlo) => (
+                        <div key={jidlo.id} className="jidlo-karta">
+                            <div className="flex justify-between items-start">
+                                <p className="text-xl font-semibold text-[var(--black)]">{jidlo.nazev}</p>
+                                <p className="text-xl font-semibold text-[var(--brown)]">{jidlo.cena} Kč</p>
+                            </div>
+                            <p className="mt-1 text-base text-[var(--gray)]">{jidlo.popis}</p>
+                            <p className="text-sm text-[var(--gray)]/80 mt-4">Alergeny: {jidlo.alergeny}</p>
+                        </div>
+                    ))}
+                </div>
+            </ClientRevealTwo>
+        </div>
+    );
 };
 
 export default JidelniListek;
