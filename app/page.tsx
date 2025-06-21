@@ -8,13 +8,13 @@ import Navstivte from "./components/Navstivte";
 
 export default function Home() {
   return (
-    <div>
+    <main>
       <Header />
       <Vitejte />
       <Nase />
       <Speciality />
       <Galerie />
       <Navstivte />
-    </div>
+    </main>
   );
 }
