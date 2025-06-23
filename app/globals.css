@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 
+
 :root {
   --white: #ffffff;
   --black: #171717;
@@ -25,7 +26,6 @@ body {
 
 
 
-
 .green-btn {
   @apply py-2 px-4 bg-[var(--green)] text-[var(--white)] rounded-sm
 }
@@ -43,7 +43,7 @@ body {
 }
 
 .text-nadpis {
-  @apply text-2xl md:text-4xl text-[var(--black)] font-bold
+  @apply text-2xl md:text-4xl text-[var(--black)] font-[family-name:var(--font-playfair)] font-bold
 }
 
 .text-podnadpis {
@@ -67,7 +67,7 @@ body {
 }
 
 .nase-nadpis {
-  @apply font-bold text-base text-[var(--black)]
+  @apply font-bold text-base text-[var(--black)] font-[family-name:var(--font-playfair)]
 }
 
 .nase-podnadpis {
@@ -79,7 +79,7 @@ body {
 }
 
 .kontaktuje-nadpis {
-  @apply font-bold text-4xl text-[var(--white)]
+  @apply font-bold text-4xl text-[var(--white)] font-[family-name:var(--font-playfair)]
 }
 
 .kontaktuje-podnadpis {
@@ -91,7 +91,7 @@ body {
 }
 
 .header-card-nadpis {
-  @apply text-5xl md:text-7xl text-[var(--white)]
+  @apply text-5xl md:text-7xl text-[var(--white)] font-[family-name:var(--font-playfair)] font-bold
 }
 
 .header-card-podnadpis {
@@ -117,7 +117,7 @@ body {
 }
 
 .footer-nadpis {
-  @apply font-semibold text-lg mb-2
+  @apply font-bold text-xl mb-2 font-[family-name:var(--font-playfair)]
 }
 
 .footer-podnadpis {
@@ -133,5 +133,17 @@ body {
 }
 
 .kontakt-nadpis {
-  @apply font-semibold text-2xl mb-2
+  @apply font-semibold text-2xl mb-2 font-[family-name:var(--font-playfair)]
+}
+
+.jidlo-nazev {
+  @apply text-xl font-semibold text-[var(--black)] font-[family-name:var(--font-playfair)]
+}
+
+.jidlo-cena {
+  @apply text-xl font-semibold text-[var(--brown)]
+}
+
+.jidlo-popis {
+  @apply mt-1 text-base text-[var(--gray)]
 }

@@ -8,7 +8,7 @@ import Navstivte from "./components/Navstivte";
 
 export default function Home() {
   return (
-    <main>
+    <main className="font-[family-name:var(--font-inter)]">
       <Header />
       <Vitejte />
       <Nase />

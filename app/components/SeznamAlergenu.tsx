@@ -13,10 +13,10 @@ const allergeny = [
 const SeznamAlergenu = () => {
   return (
     <div className='p-5 m-5 rounded-lg bg-[var(--wheat)]'>
-        <p className='py-2 mb-4 font-bold text-2xl'>Seznam alergenů</p>
+        <p className='py-2 mb-4 font-bold text-2xl font-[family-name:var(--font-playfair)]'>Seznam alergenů</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2">
             {allergeny.map((allergen, index) => (
-                <div key={index} className="flex flex-row">
+                <div key={index} className="flex flex-row ">
                     <p className="font-bold w-8">{index + 1}.</p>
                     <p className="font-normal">{allergen}</p>
                 </div>

@@ -75,7 +75,7 @@ const tymData = [
 
 const page = () => {
   return (
-    <div>
+    <div className='font-[family-name:var(--font-inter)]'>
       <ClientRevealTwo selector=".card-team">
         <div className='header-card-nav center-text'>
             <h1 className='header-card-nadpis'>O nás</h1>
@@ -112,7 +112,7 @@ const page = () => {
           <div className='width-p-page flex flex-col md:flex-row gap-5'>
             {tymData.map((clen, index) => (
               <div key={index} className='space-y-2 p-5 bg-[var(--white)] center-text rounded-lg shadow-sm card-team'>
-                <img className='mx-auto border-4 border-[var(--green)] rounded-full border-2 w-30 h-30 flex justify-center items-center' src={clen.obrazek} alt={clen.jmeno} />
+                <img className='mx-auto border-4 border-[var(--green)] rounded-full w-30 h-30 flex justify-center items-center' src={clen.obrazek} alt={clen.jmeno} />
                 <p className='font-semibold text-xl'>{clen.jmeno}</p>
                 <p className='text-[var(--green)]'>{clen.pozice}</p>
                 <p className='mt-2 text-[var(--gray)] text-sm'>{clen.popis}</p>

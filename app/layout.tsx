@@ -8,19 +8,13 @@ import ClientReveal from "./components/ClientReveal";
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
-  display: "swap",
 });
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Hostinec na Nové",
-  description: "Přijďte navštívit Hostinec na Nové v Drahanovicích.",
-};
 
 export default function RootLayout({
   children,
@@ -28,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="cs" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="antialiased">
+    <html lang="cs">
+      <body className={`${playfair.variable} ${inter.variable} antialiased font-[family-name:var(--font-inter)]`}>
         <ClientReveal>
           <Navbar />
           {children}
