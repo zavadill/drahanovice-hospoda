@@ -29,7 +29,7 @@ export const metadata = {
     siteName: 'Hostinec Na Nové',
     images: [
       {
-        url: 'https://www.hostinecnanove.cz/images/og-image.jpg',
+        url: 'https://drahanovice-hospoda.vercel.app/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Hostinec Na Nové',
