@@ -29,7 +29,7 @@ export const metadata = {
     siteName: 'Hostinec Na Nové',
     images: [
       {
-        url: 'https://www.hostinecnanove.cz/og-image.jpg',
+        url: 'https://www.hostinecnanove.cz/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Hostinec Na Nové',
@@ -42,7 +42,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Hostinec Na Nové',
     description: 'Tradiční český hostinec s domácí kuchyní a širokým výběrem jídel a nápojů.',
-    images: ['https://www.hostinecnanove.cz/twitter-image.jpg'],
+    images: ['https://www.hostinecnanove.cz/images/twitter-image.jpg'],
   },
 };
 
