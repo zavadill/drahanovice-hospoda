@@ -16,8 +16,7 @@ const Header = () => {
 
       <header className="width-page text-center space-y-5 text-[var(--white)]">
         <h1
-          className="text-4xl md:text-7xl font-bold"
-          style={{ fontFamily: 'var(--font-playfair)' }}
+          className="text-4xl md:text-7xl font-[family-name:var(--font-playfair)]"
         >
           Hostinec na Nové
         </h1>

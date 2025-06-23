@@ -30,7 +30,7 @@ const Navbar = () => {
         <div className='width-page px-3 sm:px-6 lg:px-8'>
           <div className="flex items-center justify-between h-16">
             <div>
-              <Link className='text-[var(--brown)] text-3xl' style={{fontFamily: 'var(--font-playfair)'}} href="/" onClick={() => setIsOpen(false)}>
+              <Link className='text-[var(--brown)] text-3xl font-[family-name:var(--font-playfair)]'  href="/" onClick={() => setIsOpen(false)}>
                 Hostinec na Nové
               </Link>
             </div>

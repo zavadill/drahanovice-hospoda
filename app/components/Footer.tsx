@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import Egg from './Egg';
 
 const Footer = () => {
   return (
@@ -67,6 +68,7 @@ const Footer = () => {
           <p className='text-sm'>© {new Date().getFullYear()} Hostinec na Nové. Všechna práva vyhrazena.</p>
         </div>
       </div>
+      <Egg />
     </div>
   );
 };
