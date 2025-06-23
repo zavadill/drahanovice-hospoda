@@ -16,7 +16,7 @@ const inter = Inter({
   variable: "--font-inter",
   display: 'swap',
 });
-
+  
 export const metadata = {
   title: 'Hostinec Na Nové',
   description: 'Tradiční český hostinec s domácí kuchyní a širokým výběrem jídel a nápojů.',

@@ -8,7 +8,7 @@ const page = () => {
     <div>
         <div className='header-card-nav center-text'>
             <h1 className='header-card-nadpis'>Kontakt</h1>
-            <h2 className='header-card-podnadpis'>Spojte se s námi a naplánujte si návštěvu nebo se zeptejte na cokoliv.</h2>
+            <h2 className='header-card-podnadpis px-3'>Spojte se s námi a naplánujte si návštěvu nebo se zeptejte na cokoliv.</h2>
         </div>   
         <div className='bg-[var(--white)]'>
           <div className='width-p-page'>
