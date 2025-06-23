@@ -11,7 +11,7 @@ const Header = () => {
         fill
         priority
         quality={90}
-        className="object-cover object-center -z-10"
+        className="object-cover object-center -z-10 min-h-screen max-h-screen"
       />
 
       <header className="width-page text-center space-y-5 text-[var(--white)]">

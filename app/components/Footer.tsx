@@ -64,7 +64,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className='center-text pt-5 border-t-2 border-[var(--wheat)]'>
+        <div className='center-text pt-5 border-t border-[var(--wheat)]'>
           <p className='text-sm'>© {new Date().getFullYear()} Hostinec na Nové. Všechna práva vyhrazena.</p>
         </div>
       </div>
