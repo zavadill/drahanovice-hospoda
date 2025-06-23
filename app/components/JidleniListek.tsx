@@ -87,20 +87,24 @@ const JidelniListek = () => {
       <ClientRevealTwo selector=".jidlo-karta">
         <div className="m-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {filtrovanaJidla.map((jidlo) => (
-            <div key={jidlo.id} className="jidlo-karta">
-              <div className="flex justify-between items-start">
-                <p className="jidlo-nazev">{jidlo.nazev}</p>
-                <p className="jidlo-cena">{jidlo.cena} Kč</p>
+            <div key={jidlo.id} className="jidlo-karta flex flex-col justify-between h-full p-4 border border-[var(--gray)]/20 rounded-xl shadow-sm bg-white">
+              <div>
+                <div className="flex justify-between items-start">
+                  <p className="jidlo-nazev">{jidlo.nazev}</p>
+                  <p className="jidlo-cena">{jidlo.cena} Kč</p>
+                </div>
+                <p className="jidlo-popis mt-2">{jidlo.popis}</p>
               </div>
-              <p className="jidlo-popis">{jidlo.popis}</p>
-              <div className="flex justify-between items-start text-[var(--gray)]/80 mt-4">
-                <p className="text-sm">Alergeny: {jidlo.alergeny || '–'}</p>
-                <p className="text-sm text-[var(--brown)]">{jidlo.gram}</p>
+
+              <div className="flex justify-between items-end text-[var(--gray)]/80 text-sm mt-6 pt-2 border-t border-[var(--gray)]/10">
+                <p>Alergeny: {jidlo.alergeny || '–'}</p>
+                <p className="text-[var(--brown)]">{jidlo.gram}</p>
               </div>
             </div>
           ))}
         </div>
       </ClientRevealTwo>
+
     </div>
   );
 };
