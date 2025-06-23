@@ -15,6 +15,37 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+export const metadata = {
+  title: 'Hostinec Na Nové',
+  description: 'Tradiční český hostinec s domácí kuchyní a širokým výběrem jídel a nápojů.',
+  keywords: ['Hostinec', 'Na Nové', 'česká kuchyně', 'restaurace', 'jídelní lístek'],
+  authors: [{ name: 'Adam Zavadil' }],
+  creator: 'Adam Zavadil',
+  publisher: 'Hostinec Na Nové',
+  openGraph: {
+    title: 'Hostinec Na Nové',
+    description: 'Tradiční český hostinec s domácí kuchyní a širokým výběrem jídel a nápojů.',
+    url: 'https://www.hostinecnanove.cz',
+    siteName: 'Hostinec Na Nové',
+    images: [
+      {
+        url: 'https://www.hostinecnanove.cz/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Hostinec Na Nové',
+      },
+    ],
+    locale: 'cs_CZ',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Hostinec Na Nové',
+    description: 'Tradiční český hostinec s domácí kuchyní a širokým výběrem jídel a nápojů.',
+    images: ['https://www.hostinecnanove.cz/twitter-image.jpg'],
+  },
+};
+
 
 export default function RootLayout({
   children,
