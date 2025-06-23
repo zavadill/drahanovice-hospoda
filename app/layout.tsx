@@ -25,7 +25,7 @@ export const metadata = {
   openGraph: {
     title: 'Hostinec Na Nové',
     description: 'Tradiční český hostinec s domácí kuchyní a širokým výběrem jídel a nápojů.',
-    url: 'https://www.hostinecnanove.cz',
+    url: 'https://drahanovice-hospoda.vercel.app/',
     siteName: 'Hostinec Na Nové',
     images: [
       {
