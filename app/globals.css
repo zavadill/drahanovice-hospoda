@@ -95,7 +95,7 @@ body {
 }
 
 .header-card-podnadpis {
-  @apply text-base md:text-xl text-[var(--white)] max-w-2xl mx-auto
+  @apply text-base md:text-xl text-[var(--white)] max-w-3xl mx-auto
 }
 
 .button-menu {
