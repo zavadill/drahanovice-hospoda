@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hostinec Na Nové
 
-## Getting Started
+Oficiální webová prezentace Hostince Na Nové — tradičního českého hostince s historií od roku 1762. Web představuje historii, prostory, služby, akce a kontakty hostince. Projekt je vytvořen pomocí **Next.js**, **React** a stylován pomocí **Tailwind CSS**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Obsah
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [O projektu](#o-projektu)  
+- [Funkce](#funkce)  
+- [Technologie](#technologie)  
+- [Struktura projektu](#struktura-projektu)  
+- [Spuštění projektu](#spuštění-projektu)  
+- [Licence](#licence)  
+- [Kontakt](#kontakt)  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## O projektu
 
-## Learn More
+Tento web slouží jako informační a prezentační platforma pro Hostinec Na Nové. Nabízí přehled historie, popis jednotlivých prostor, možnosti pořádání svatebních, rodinných a firemních akcí, aktuální ceník služeb a kontaktní údaje včetně mapy.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Funkce
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Historie hostince** s časovou osou významných událostí  
+- **Přehled prostor** – hlavní restaurace, salonky, letní zahrádka  
+- **Sekce pro svatby, rodinné oslavy a firemní akce** s detailním popisem služeb a ceníkem  
+- **Kontaktní stránka** s otevírací dobou, telefonními čísly, e-mailem a mapou  
+- **Galerie fotografií** (zatím bez fotek, připravený layout)  
+- Responzivní design a animace pomocí komponenty `ClientRevealTwo`  
+- Využití ikon z balíčku `lucide-react`  
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Technologie
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js](https://nextjs.org/) – React framework pro SSR a SSG  
+- React – komponentový UI framework  
+- Tailwind CSS – utility-first CSS framework pro styling  
+- Lucide-react – knihovna ikon  
+- Vlastní komponenty jako `ClientRevealTwo`, `CustomHeaderButtons`, `MapWrapper`  
+
+---
+
+## Struktura projektu (výběr)
+
