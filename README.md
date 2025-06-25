@@ -41,8 +41,3 @@ Tento web slouží jako informační a prezentační platforma pro Hostinec Na N
 - Tailwind CSS – utility-first CSS framework pro styling  
 - Lucide-react – knihovna ikon  
 - Vlastní komponenty jako `ClientRevealTwo`, `CustomHeaderButtons`, `MapWrapper`  
-
----
-
-## Struktura projektu (výběr)
-
