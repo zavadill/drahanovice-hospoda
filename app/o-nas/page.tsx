@@ -1,5 +1,54 @@
 import React from 'react'
 import ClientRevealTwo from '../components/ClientRevealTwo';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "O nás | Hostinec Na Nové",
+  description:
+    "Seznamte se s bohatou historií Hostince Na Nové, který byl založen v roce 1762. Poznejte náš tým a příběh tradičního českého pohostinství v srdci Hané.",
+  keywords: [
+    "o nás",
+    "Hostinec Na Nové",
+    "historie",
+    "tradiční hostinec",
+    "česká pohostinnost",
+    "Haná",
+    "Olomouc",
+    "Drahanovice",
+    "rodinný podnik",
+    "restaurace",
+    "tým",
+    "kuchyně",
+  ],
+  openGraph: {
+    title: "O nás | Hostinec Na Nové",
+    description:
+      "Hostinec Na Nové – místo s historií sahající do roku 1762. Seznamte se s naším příběhem a týmem, který se stará o vaše pohodlí a chuťové zážitky.",
+    url: "https://drahanovice-hospoda.vercel.app/o-nas",
+    siteName: "Hostinec Na Nové",
+    images: [
+      {
+        url: "https://drahanovice-hospoda.vercel.app/images/og-onas.jpg", // nahraď reálným obrázkem týmu nebo historické budovy
+        width: 1200,
+        height: 630,
+        alt: "Hostinec Na Nové - O nás",
+      },
+    ],
+    locale: "cs_CZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "O nás | Hostinec Na Nové",
+    description:
+      "Poznejte historii hostince, který je součástí regionu Haná už od roku 1762, a náš tým lidí, kteří vytvářejí rodinnou atmosféru.",
+    images: ["https://drahanovice-hospoda.vercel.app/images/og-onas.jpg"],
+  },
+  authors: [{ name: "Adam Zavadil" }],
+  creator: "Adam Zavadil",
+  publisher: "Hostinec Na Nové",
+};
+
 
 const historieData = [
   {

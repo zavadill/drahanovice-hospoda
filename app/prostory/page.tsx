@@ -1,5 +1,54 @@
 import React from 'react'
 import CustomHeaderButtons from '../components/CustomHeaderButtons'
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Prostory | Hostinec Na Nové",
+  description:
+    "Objevte všechny prostory Hostince Na Nové – hlavní restauraci, salonky a letní zahrádku. Ideální pro rodinné oslavy, svatby, firemní večírky i běžné posezení.",
+  keywords: [
+    "Prostory",
+    "Hostinec Na Nové",
+    "restaurace",
+    "salonek",
+    "zahrádka",
+    "oslavy",
+    "svatby",
+    "firemní akce",
+    "dětské hřiště",
+    "venkovní posezení",
+    "rezervace prostor",
+    "Drahanovice",
+  ],
+  openGraph: {
+    title: "Prostory | Hostinec Na Nové",
+    description:
+      "Hostinec Na Nové nabízí útulné prostory pro každou příležitost – od hlavní restaurace přes soukromé salonky až po letní zahrádku s dětským hřištěm.",
+    url: "https://drahanovice-hospoda.vercel.app/prostory",
+    siteName: "Hostinec Na Nové",
+    images: [
+      {
+        url: "https://drahanovice-hospoda.vercel.app/images/og-prostory.jpg", // Nahraď fotkou interiéru/zahrádky
+        width: 1200,
+        height: 630,
+        alt: "Interiér a prostory Hostince Na Nové",
+      },
+    ],
+    locale: "cs_CZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Prostory | Hostinec Na Nové",
+    description:
+      "Poznejte všechny naše prostory – restauraci, salonky i letní zahrádku s dětským koutkem. Skvělé místo pro každou příležitost.",
+    images: ["https://drahanovice-hospoda.vercel.app/images/og-prostory.jpg"],
+  },
+  authors: [{ name: "Adam Zavadil" }],
+  creator: "Adam Zavadil",
+  publisher: "Hostinec Na Nové",
+};
+
 
 const page = () => {
   return (

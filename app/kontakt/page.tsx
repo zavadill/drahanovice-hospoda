@@ -2,6 +2,52 @@ import React from 'react'
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import CustomHeaderButtons from '../components/CustomHeaderButtons';
 import MapWrapper from '../components/MapWrapper';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Kontakt | Hostinec Na Nové",
+  description:
+    "Spojte se s námi a naplánujte si návštěvu. Hostinec Na Nové v Drahanovicích – otevírací doba, telefon, e-mail a mapa s polohou.",
+  keywords: [
+    "kontakt",
+    "Hostinec Na Nové",
+    "Drahanovice",
+    "restaurace kontakt",
+    "telefon",
+    "e-mail",
+    "otevírací doba",
+    "jak se dostat",
+    "hostinec v Drahanovicích",
+  ],
+  openGraph: {
+    title: "Kontakt | Hostinec Na Nové",
+    description:
+      "Najdete nás v centru obce Drahanovice. Zavolejte nebo napište a rezervujte si stůl nebo prostory pro vaši akci.",
+    url: "https://drahanovice-hospoda.vercel.app/kontakt",
+    siteName: "Hostinec Na Nové",
+    images: [
+      {
+        url: "https://drahanovice-hospoda.vercel.app/images/og-kontakt.jpg", // nahraď obrázkem mapy nebo fotkou zvenku
+        width: 1200,
+        height: 630,
+        alt: "Hostinec Na Nové – kontakt, poloha, otevírací doba",
+      },
+    ],
+    locale: "cs_CZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kontakt | Hostinec Na Nové",
+    description:
+      "Rezervujte si stůl, akci nebo se nás jen zeptejte. Najdete nás v centru Drahanovic.",
+    images: ["https://drahanovice-hospoda.vercel.app/images/og-kontakt.jpg"],
+  },
+  authors: [{ name: "Adam Zavadil" }],
+  creator: "Adam Zavadil",
+  publisher: "Hostinec Na Nové",
+};
+
 
 const page = () => {
   return (

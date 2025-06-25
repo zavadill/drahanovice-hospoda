@@ -1,6 +1,55 @@
 import React from 'react'
 import CustomHeaderButtons from '../components/CustomHeaderButtons'
 import ClientRevealTwo from '../components/ClientRevealTwo'
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Svatby a akce | Hostinec Na Nové",
+  description:
+    "Uspořádejte u nás svatbu, rodinnou oslavu nebo firemní akci. Hostinec Na Nové nabízí profesionální servis, útulné prostředí a individuální přístup.",
+  keywords: [
+    "svatební hostina",
+    "rodinná oslava",
+    "firemní večírek",
+    "salonek",
+    "svatby",
+    "oslavy",
+    "firemní akce",
+    "raut",
+    "svatební menu",
+    "rezervace prostor",
+    "Hostinec Na Nové",
+    "Drahanovice",
+  ],
+  openGraph: {
+    title: "Prostory a akce | Hostinec Na Nové",
+    description:
+      "Kompletní zajištění svateb, rodinných oslav a firemních akcí na klíč v příjemném a stylovém prostředí.",
+    url: "https://drahanovice-hospoda.vercel.app/prostory-a-akce",
+    siteName: "Hostinec Na Nové",
+    images: [
+      {
+        url: "https://drahanovice-hospoda.vercel.app/images/og-akce.jpg", // Nahraď vhodným obrázkem interiéru nebo slavnostní tabule
+        width: 1200,
+        height: 630,
+        alt: "Svatební a společenské akce v Hostinci Na Nové",
+      },
+    ],
+    locale: "cs_CZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Prostory a akce | Hostinec Na Nové",
+    description:
+      "Zajistíme pro vás svatbu, oslavu nebo firemní večírek. Přizpůsobíme se vašim přáním a zajistíme vše od jídla po výzdobu.",
+    images: ["https://drahanovice-hospoda.vercel.app/images/og-akce.jpg"],
+  },
+  authors: [{ name: "Adam Zavadil" }],
+  creator: "Adam Zavadil",
+  publisher: "Hostinec Na Nové",
+};
+
 
 const page = () => {
   return (
