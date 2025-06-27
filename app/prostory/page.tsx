@@ -69,7 +69,7 @@ const page = () => {
                 <p>Restaurace je ideální pro běžnou návštěvu a stravování, ale také pro menší rodinné oslavy či firemní obědy. Prostor je plně klimatizovaný a nabízí výhled na naši krásnou zahradu.</p>
                 <p>V hlavní restauraci vám nabízíme kompletní menu včetně denní nabídky obědů od úterý do neděle.</p>
               </div>
-              <img className='flex-1/2 rounded-2xl border-2 h-150' src="" alt="" />
+              <img className='flex-1/2 rounded-2xl border h-100' src="" alt="" />
             </div>
           </div>
         </div>
@@ -80,7 +80,7 @@ const page = () => {
               <p className='text-podnadpis pb-20'>Malý salonek (20 osob) a velký salonek (50 osob)</p>
             </div>
             <div className='gap-10 flex flex-col md:flex-row items-center'>
-              <img className='flex-1/2 h-150 border-2 rounded-2xl' src="" alt="" />
+              <img className='flex-1/2 h-100 border rounded-2xl' src="" alt="" />
               <div className='space-y-5 flex-1/2'>
                 <p>Pro soukromé akce nabízíme dva samostatné salonky s různou kapacitou:</p>
                 <ul className='space-y-2 pl-5 border-l-2'>
@@ -110,7 +110,7 @@ const page = () => {
                 </ul>
                 <p>Zahrádka je ideálním místem pro rodiny s dětmi, letní rodinné oslavy nebo jen příjemné posezení s přáteli u dobrého jídla a pití.</p>
               </div>
-              <img className='flex-1/2 h-150 border-2 rounded-2xl' src="" alt="" />
+              <img className='flex-1/2 h-100 border rounded-2xl' src="" alt="" />
             </div>
           </div>
         </div>

@@ -1,0 +1,35 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum Kategorie {
+  PREDKRMY
+  POLEVKY
+  HLAVNI_JIDLA
+  DEZERTY
+  NAPOJE
+}
+
+model MenuData {
+  id        Int       @id @default(autoincrement())
+  kategorie Kategorie
+  nazev     String
+  popis     String?
+  cena      Int
+  alergeny  String?
+  gram      String
+}
+
+// Váš stávající model
+model OteviraciDoba {
+  id    Int    @id @default(autoincrement())
+  den   String
+  cas   String
+}

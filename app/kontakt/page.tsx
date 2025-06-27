@@ -3,6 +3,7 @@ import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import CustomHeaderButtons from '../components/CustomHeaderButtons';
 import MapWrapper from '../components/MapWrapper';
 import type { Metadata } from "next";
+import OteviraciDoba from '../components/OteviraciDoba';
 
 export const metadata: Metadata = {
   title: "Kontakt | Hostinec Na Nové",
@@ -86,36 +87,7 @@ const page = () => {
               </div>
               <div className='max-w-2xl w-full mx-auto'>
                 <p className='kontakt-nadpis'>Otevírací doba</p>
-                <div>
-                  <div className='flex flex-row justify-between'>
-                    <div className='kontakt-podnadpis'>
-                      <div><Clock size={20} /></div>
-                      <p>Pondělí</p>
-                    </div>
-                    <p className='text-base'>Zavřeno</p>
-                  </div>
-                  <div className='flex flex-row justify-between'>
-                    <div className='kontakt-podnadpis'>
-                      <div><Clock size={20} /></div>
-                      <p>Úterý - Čtvrtek</p>
-                    </div>
-                    <p className='text-base'>11:00 - 21:00</p>
-                  </div>
-                  <div className='flex flex-row justify-between'>
-                    <div className='kontakt-podnadpis'>
-                      <div><Clock size={20} /></div>
-                      <p>Pátek - Sobota</p>
-                    </div>
-                    <p className='text-base'>11:00 - 22:00</p>
-                  </div>
-                  <div className='flex flex-row justify-between'>
-                    <div className='kontakt-podnadpis'>
-                      <div><Clock size={20} /></div>
-                      <p>Neděle</p>
-                    </div>
-                    <p className='text-base'>11:00 - 20:00</p>
-                  </div>
-                </div>
+                <OteviraciDoba />
               </div>
               <div className='flex flex-row space-x-5 max-w-2xl mx-auto w-full '>
                     <CustomHeaderButtons 
