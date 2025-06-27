@@ -1,18 +1,28 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const id = Number(params.id);
-  const data = await request.json();
-  const updatedDen = await prisma.oteviraciDoba.update({
-    where: { id },
-    data,
-  });
-  return NextResponse.json(updatedDen);
+  const data = await req.json();
+
+  try {
+    const updated = await prisma.oteviraciDoba.update({
+      where: { id },
+      data,
+    });
+    return Response.json(updated);
+  } catch (error) {
+    return new Response('Chyba při aktualizaci dne', { status: 500 });
+  }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const id = Number(params.id);
-  await prisma.oteviraciDoba.delete({ where: { id } });
-  return NextResponse.json({ message: "Deleted" });
+
+  try {
+    await prisma.oteviraciDoba.delete({ where: { id } });
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    return new Response('Chyba při mazání dne', { status: 500 });
+  }
 }
