@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useMemo, FC, FormEvent } from "react";
-import { Pencil, Trash2, Save, X, LoaderCircle, PlusCircle } from "lucide-react";
+import { Pencil, Trash2, Save, X, LoaderCircle } from "lucide-react";
 
 // --- TYPY (beze změny) ---
 type MenuItem = {
@@ -35,7 +35,6 @@ const kategorieMap: Record<string, string> = {
 
 // --- POMOCNÉ KOMPONENTY ---
 
-// Notifikační komponenta pro zpětnou vazbu
 const NotificationBanner: FC<{ notification: Notification | null; onDismiss: () => void }> = ({
   notification,
   onDismiss,
@@ -66,7 +65,6 @@ const NotificationBanner: FC<{ notification: Notification | null; onDismiss: () 
   );
 };
 
-// Komponenta pro jeden řádek v menu
 const MenuItemRow: FC<{
   item: MenuItem;
   onUpdate: (id: number, data: Partial<MenuItem>) => Promise<void>;
@@ -76,7 +74,6 @@ const MenuItemRow: FC<{
   const [isEditing, setIsEditing] = useState(false);
   const [editedItem, setEditedItem] = useState(item);
 
-  // Synchronizace interního stavu s externími daty
   useEffect(() => {
     setEditedItem(item);
   }, [item]);
@@ -177,7 +174,6 @@ const MenuItemRow: FC<{
   );
 };
 
-// Komponenta pro otevírací dobu
 const OpeningHoursRow: FC<{
   den: OteviraciDen;
   onUpdate: (id: number, data: Partial<OteviraciDen>) => Promise<void>;
@@ -187,7 +183,6 @@ const OpeningHoursRow: FC<{
   const [isEditing, setIsEditing] = useState(false);
   const [editedDen, setEditedDen] = useState(den);
 
-  // Synchronizace interního stavu s externími daty
   useEffect(() => {
     setEditedDen(den);
   }, [den]);
@@ -271,7 +266,6 @@ const OpeningHoursRow: FC<{
   );
 };
 
-// --- HLAVNÍ KOMPONENTA STRÁNKY ---
 export default function AdminPage() {
   const [menuData, setMenuData] = useState<MenuItem[]>([]);
   const [oteviraciDoba, setOteviraciDoba] = useState<OteviraciDen[]>([]);
@@ -307,8 +301,6 @@ export default function AdminPage() {
       return acc;
     }, {} as Record<string, MenuItem[]>);
   }, [menuData]);
-
-  // --- FUNKCE PRO PRÁCI S API ---
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -370,9 +362,9 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/menu/${id}`, {
-          method: "PUT",
+          method: "POST", // místo PUT POST
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updated),
+          body: JSON.stringify({ action: "update", payload: updated }), // action a payload
         }),
       "Položka menu byla aktualizována.",
       "Chyba při aktualizaci položky menu."
@@ -383,7 +375,9 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/menu/${id}`, {
-          method: "DELETE",
+          method: "POST", // místo DELETE POST
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "delete" }), // action delete
         }),
       "Položka menu byla smazána.",
       "Chyba při mazání položky menu."
@@ -413,9 +407,9 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/oteviraci-doba/${id}`, {
-          method: "PUT",
+          method: "POST", // místo PUT POST
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updated),
+          body: JSON.stringify({ action: "update", payload: updated }),
         }),
       "Otevírací doba byla aktualizována.",
       "Chyba při aktualizaci otevírací doby."
@@ -426,7 +420,9 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/oteviraci-doba/${id}`, {
-          method: "DELETE",
+          method: "POST", // místo DELETE POST
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "delete" }),
         }),
       "Den byl smazán.",
       "Chyba při mazání dne."
@@ -480,22 +476,15 @@ export default function AdminPage() {
                   onChange={(e) => setNewMenuItem({ ...newMenuItem, popis: e.target.value })}
                   className="w-full p-2 border rounded-md"
                 />
-                  <input
-                    type="number"
-                    placeholder="Cena (Kč)"
-                    value={newMenuItem.cena}
-                    onChange={(e) => setNewMenuItem({ ...newMenuItem, cena: Number(e.target.value) })}
-                    className="w-full p-2 border rounded-md"
-                    min={0}
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="Gramáž"
-                    value={newMenuItem.gram}
-                    onChange={(e) => setNewMenuItem({ ...newMenuItem, gram: e.target.value })}
-                    className="w-full p-2 border rounded-md"
-                  />
+                <input
+                  type="number"
+                  placeholder="Cena"
+                  value={newMenuItem.cena}
+                  onChange={(e) => setNewMenuItem({ ...newMenuItem, cena: Number(e.target.value) })}
+                  className="w-full p-2 border rounded-md"
+                  required
+                  min={0}
+                />
                 <input
                   type="text"
                   placeholder="Alergeny"
@@ -503,10 +492,17 @@ export default function AdminPage() {
                   onChange={(e) => setNewMenuItem({ ...newMenuItem, alergeny: e.target.value })}
                   className="w-full p-2 border rounded-md"
                 />
+                <input
+                  type="text"
+                  placeholder="Gramáž"
+                  value={newMenuItem.gram}
+                  onChange={(e) => setNewMenuItem({ ...newMenuItem, gram: e.target.value })}
+                  className="w-full p-2 border rounded-md"
+                />
                 <button
                   type="submit"
                   disabled={isProcessing}
-                  className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md disabled:opacity-50"
                 >
                   Přidat položku
                 </button>
@@ -519,7 +515,7 @@ export default function AdminPage() {
               <form onSubmit={addOteviraciDen} className="space-y-4">
                 <input
                   type="text"
-                  placeholder="Den (např. Pondělí)"
+                  placeholder="Den"
                   value={newOteviraciDen.den}
                   onChange={(e) => setNewOteviraciDen({ ...newOteviraciDen, den: e.target.value })}
                   className="w-full p-2 border rounded-md"
@@ -527,7 +523,7 @@ export default function AdminPage() {
                 />
                 <input
                   type="text"
-                  placeholder="Čas (např. 8:00 - 17:00)"
+                  placeholder="Čas"
                   value={newOteviraciDen.cas}
                   onChange={(e) => setNewOteviraciDen({ ...newOteviraciDen, cas: e.target.value })}
                   className="w-full p-2 border rounded-md"
@@ -536,7 +532,7 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={isProcessing}
-                  className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition disabled:opacity-50"
+                  className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-md disabled:opacity-50"
                 >
                   Přidat den
                 </button>
@@ -544,13 +540,33 @@ export default function AdminPage() {
             </div>
           </aside>
 
-          {/* PRAVÝ SLOUPEC - DATA */}
-          <section className="lg:col-span-2 space-y-10">
-            {/* OTEVÍRACÍ DOBA */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-700">Otevírací doba</h2>
+          {/* PRAVÝ SLOUPEC - SEZNAMY */}
+          <section className="lg:col-span-2 space-y-12">
+            {/* MENU SEZNAM */}
+            <div>
+              <h2 className="text-3xl font-bold mb-6 text-gray-800">Menu</h2>
+              {Object.entries(groupedMenu).map(([category, items]) => (
+                <div key={category} className="mb-10">
+                  <h3 className="text-2xl font-semibold mb-4 text-gray-700">{category}</h3>
+                  <div className="space-y-3">
+                    {items.map((item) => (
+                      <MenuItemRow
+                        key={item.id}
+                        item={item}
+                        onUpdate={updateMenuItem}
+                        onDelete={deleteMenuItem}
+                        isProcessing={isProcessing}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* OTEVÍRACÍ DOBA SEZNAM */}
+            <div>
+              <h2 className="text-3xl font-bold mb-6 text-gray-800">Otevírací doba</h2>
               <div className="space-y-3">
-                {oteviraciDoba.length === 0 && <p>Žádná data k zobrazení.</p>}
                 {oteviraciDoba.map((den) => (
                   <OpeningHoursRow
                     key={den.id}
@@ -562,25 +578,6 @@ export default function AdminPage() {
                 ))}
               </div>
             </div>
-
-            {/* MENU PODLE KATEGORIÍ */}
-            {Object.entries(groupedMenu).map(([kategorie, items]) => (
-              <div key={kategorie} className="bg-white p-6 rounded-xl shadow-md">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-700">{kategorie}</h2>
-                <div className="space-y-3">
-                  {items.length === 0 && <p>Žádné položky v této kategorii.</p>}
-                  {items.map((item) => (
-                    <MenuItemRow
-                      key={item.id}
-                      item={item}
-                      onUpdate={updateMenuItem}
-                      onDelete={deleteMenuItem}
-                      isProcessing={isProcessing}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
           </section>
         </div>
       </div>

@@ -1,4 +1,3 @@
-//api/oteviraci-doba/route.ts
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
@@ -10,16 +9,21 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession();
-  if (!session) {
+
+  if (!session || !session.user || session.user.email !== process.env.ADMIN_EMAIL) {
     return new Response("Unauthorized", { status: 401 });
   }
 
   const data = await req.json();
 
-  try {
-    const created = await prisma.oteviraciDoba.create({ data });
-    return new Response(JSON.stringify(created), { status: 201 });
-  } catch (error) {
-    return new Response("Chyba při přidávání dne", { status: 500 });
+  if (data.action === "create") {
+    try {
+      const created = await prisma.oteviraciDoba.create({ data: data.payload });
+      return new Response(JSON.stringify(created), { status: 201 });
+    } catch (error) {
+      return new Response("Chyba při přidávání dne", { status: 500 });
+    }
+  } else {
+    return new Response("Invalid action", { status: 400 });
   }
 }
