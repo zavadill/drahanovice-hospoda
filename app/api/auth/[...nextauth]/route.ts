@@ -10,7 +10,7 @@ const handler = NextAuth({
         email: { label: "Email", type: "text" },
         password: { label: "Heslo", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials: Record<string, string> | undefined) {
         const validEmail = process.env.ADMIN_EMAIL;
         const validPassword = process.env.ADMIN_PASSWORD;
 
