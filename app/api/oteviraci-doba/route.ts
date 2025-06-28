@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function GET() {
   const dny = await prisma.oteviraciDoba.findMany({ orderBy: { id: 'asc' } });
@@ -8,9 +9,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session) {
-    return new Response('Nepovolený přístup', { status: 401 });
+    return new Response('Unauthorized', { status: 401 });
   }
 
   const data = await req.json();

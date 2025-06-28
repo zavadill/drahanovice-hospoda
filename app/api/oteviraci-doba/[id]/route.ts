@@ -1,39 +1,25 @@
 import { NextRequest } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]/route';
 
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
-  const session = await getServerSession();
+export async function GET() {
+  const dny = await prisma.oteviraciDoba.findMany({ orderBy: { id: 'asc' } });
+  return Response.json(dny);
+}
+
+export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
   if (!session) {
-    return new Response('Nepovolený přístup', { status: 401 });
+    return new Response('Unauthorized', { status: 401 });
   }
 
-  const id = parseInt(context.params.id, 10);
   const data = await req.json();
 
   try {
-    const updated = await prisma.oteviraciDoba.update({
-      where: { id },
-      data,
-    });
-    return Response.json(updated);
-  } catch {
-    return new Response('Chyba při aktualizaci dne', { status: 500 });
-  }
-}
-
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
-  const session = await getServerSession();
-  if (!session) {
-    return new Response('Nepovolený přístup', { status: 401 });
-  }
-
-  const id = parseInt(context.params.id, 10);
-
-  try {
-    await prisma.oteviraciDoba.delete({ where: { id } });
-    return new Response(null, { status: 204 });
-  } catch {
-    return new Response('Chyba při mazání dne', { status: 500 });
+    const created = await prisma.oteviraciDoba.create({ data });
+    return Response.json(created, { status: 201 });
+  } catch (error) {
+    return new Response('Chyba při přidávání dne', { status: 500 });
   }
 }
