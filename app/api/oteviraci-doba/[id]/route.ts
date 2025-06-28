@@ -1,14 +1,9 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
 
-interface Params {
-  params: { id: string };
-}
-
-export async function PUT(req: NextRequest, { params }: Params) {
-  const session = await getServerSession(authOptions);
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession();
   if (!session) {
     return new Response("Nepovolený přístup", { status: 401 });
   }
@@ -22,13 +17,13 @@ export async function PUT(req: NextRequest, { params }: Params) {
       data,
     });
     return new Response(JSON.stringify(updated), { status: 200 });
-  } catch {
+  } catch (error) {
     return new Response("Chyba při aktualizaci dne", { status: 500 });
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: Params) {
-  const session = await getServerSession(authOptions);
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession();
   if (!session) {
     return new Response("Nepovolený přístup", { status: 401 });
   }
@@ -38,7 +33,7 @@ export async function DELETE(req: NextRequest, { params }: Params) {
   try {
     await prisma.oteviraciDoba.delete({ where: { id } });
     return new Response(null, { status: 204 });
-  } catch {
+  } catch (error) {
     return new Response("Chyba při mazání dne", { status: 500 });
   }
 }

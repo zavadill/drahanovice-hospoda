@@ -1,14 +1,9 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
 
-interface Params {
-  params: { id: string };
-}
-
-export async function PUT(req: NextRequest, { params }: Params) {
-  const session = await getServerSession(authOptions);
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession();
   if (!session) {
     return new Response("Nepovolený přístup", { status: 401 });
   }
@@ -27,8 +22,8 @@ export async function PUT(req: NextRequest, { params }: Params) {
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: Params) {
-  const session = await getServerSession(authOptions);
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession();
   if (!session) {
     return new Response("Nepovolený přístup", { status: 401 });
   }
