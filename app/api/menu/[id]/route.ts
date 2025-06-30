@@ -14,15 +14,12 @@ const db = {
 };
 
 // Define a schema for validating the incoming request body for PUT requests.
-// This ensures type safety and that only expected fields are processed.
 const updateMenuSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters long.").optional(),
   price: z.number().positive("Price must be a positive number.").optional(),
-}).strict(); //.strict() ensures no unknown fields are allowed.
+}).strict();
 
 // This line is crucial for Vercel.
-// It tells Next.js to treat this route as fully dynamic,
-// ensuring it's executed as a serverless function on every request.
 export const dynamic = 'force-dynamic';
 
 /**
@@ -31,10 +28,10 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // Type updated to Promise
 ) {
   try {
-    const id = params.id; // Correctly access the dynamic 'id' parameter.
+    const { id } = await params; // Await params before accessing 'id'
 
     const menuItem = await db.menu.findUnique(id);
 
@@ -60,13 +57,12 @@ export async function GET(
  */
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // Type updated to Promise
 ) {
   try {
-    const id = params.id; // Correctly access the dynamic 'id' parameter.
-    const body = await request.json(); // Correctly parse the JSON body from the request.
+    const { id } = await params; // Await params before accessing 'id'
+    const body = await request.json();
 
-    // Validate the request body against the Zod schema.
     const validation = updateMenuSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
@@ -92,10 +88,10 @@ export async function PUT(
  */
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // Type updated to Promise
 ) {
   try {
-    const id = params.id; // Correctly access the dynamic 'id' parameter.
+    const { id } = await params; // Await params before accessing 'id'
 
     await db.menu.delete(id);
 
