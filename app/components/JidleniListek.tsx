@@ -1,13 +1,12 @@
+// app/components/JidleniListek.tsx (opravená verze)
+
 import React from 'react';
 import ClientRevealTwo from './ClientRevealTwo';
 import DataMenu from './DataMenu';
-import { prisma } from '@/lib/prisma';
-
-
+import prisma from '@/lib/prisma';
 
 const JidelniListek = async () => {
   const dataMenu = await prisma.menuData.findMany();
-
   return <DataMenu menuData={dataMenu}/>
 };
 

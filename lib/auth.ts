@@ -1,32 +1,27 @@
-import NextAuth, { AuthOptions } from "next-auth";
+// File: lib/auth.ts
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { getServerSession as nextAuthGetServerSession } from "next-auth";
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Přihlášení pro admina",
+      name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Heslo", type: "password" },
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (
-          credentials?.email === process.env.ADMIN_EMAIL &&
-          credentials?.password === process.env.ADMIN_PASSWORD
-        ) {
-          return { id: "admin", name: "Admin", email: process.env.ADMIN_EMAIL };
+        if (credentials?.username === "admin" && credentials?.password === "tajne") {
+          return { id: "1", name: "Admin" };
         }
         return null;
       },
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/prihlaseni",
   },
-  secret: process.env.NEXTAUTH_SECRET,
-};
-
-export const getServerAuthSession = () => {
-  return nextAuthGetServerSession(authOptions);
+  session: {
+    strategy: "jwt",
+  },
 };

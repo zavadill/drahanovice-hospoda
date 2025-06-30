@@ -79,7 +79,9 @@ const MenuItemRow: FC<{
   }, [item]);
 
   const handleSave = async () => {
-    await onUpdate(item.id, editedItem);
+    // Odstraníme 'id' a 'kategorie' z odesílaných dat, pokud je nechceme měnit v řádku
+    const { id, kategorie, ...updateData } = editedItem;
+    await onUpdate(item.id, updateData);
     setIsEditing(false);
   };
 
@@ -306,13 +308,13 @@ export default function AdminPage() {
     setIsLoading(true);
     try {
       const [menuRes, oteviraciDobaRes] = await Promise.all([fetch("/api/menu"), fetch("/api/oteviraci-doba")]);
-      if (!menuRes.ok || !oteviraciDobaRes.ok) throw new Error("Nepodařilo se načíst data.");
+      if (!menuRes.ok || !oteviraciDobaRes.ok) throw new Error("Nepodařilo se načíst data ze serveru.");
       const menu = await menuRes.json();
       const doba = await oteviraciDobaRes.json();
       setMenuData(menu);
       setOteviraciDoba(doba);
     } catch (error) {
-      showNotification(error instanceof Error ? error.message : "Neznámá chyba", "error");
+      showNotification(error instanceof Error ? error.message : "Neznámá chyba při načítání dat.", "error");
     } finally {
       setIsLoading(false);
     }
@@ -321,18 +323,21 @@ export default function AdminPage() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  
   const handleApiCall = async (apiCall: () => Promise<Response>, successMessage: string, errorMessage: string) => {
     setIsProcessing(true);
     try {
       const res = await apiCall();
       if (!res.ok) {
+        // Zkusíme získat konkrétní chybu z těla odpovědi API
         const errorData = await res.text();
+        // Pokud API vrátilo text, zobrazíme ho, jinak naši obecnou zprávu
         throw new Error(errorData || errorMessage);
       }
       showNotification(successMessage, "success");
       await fetchData();
     } catch (error) {
+      // Zobrazíme chybu, ať už přišla z `throw new Error` nebo odjinud
       showNotification(error instanceof Error ? error.message : errorMessage, "error");
     } finally {
       setIsProcessing(false);
@@ -362,9 +367,9 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/menu/${id}`, {
-          method: "POST", // místo PUT POST
+          method: "POST", // Používáme POST
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "update", payload: updated }), // action a payload
+          body: JSON.stringify({ action: "update", payload: updated }), // Posíláme akci a data
         }),
       "Položka menu byla aktualizována.",
       "Chyba při aktualizaci položky menu."
@@ -375,9 +380,9 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/menu/${id}`, {
-          method: "POST", // místo DELETE POST
+          method: "POST", // Používáme POST
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "delete" }), // action delete
+          body: JSON.stringify({ action: "delete" }), // Posíláme akci
         }),
       "Položka menu byla smazána.",
       "Chyba při mazání položky menu."
@@ -407,7 +412,7 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/oteviraci-doba/${id}`, {
-          method: "POST", // místo PUT POST
+          method: "POST", // Používáme POST
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "update", payload: updated }),
         }),
@@ -420,7 +425,7 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/oteviraci-doba/${id}`, {
-          method: "POST", // místo DELETE POST
+          method: "POST", // Používáme POST
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "delete" }),
         }),
@@ -438,7 +443,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8 mt-17">
+    <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8 mt-16"> {/* Upravil jsem mt-17 na mt-16, což je běžnější hodnota */}
       <NotificationBanner notification={notification} onDismiss={() => setNotification(null)} />
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">Admin Panel</h1>
@@ -483,7 +488,7 @@ export default function AdminPage() {
                   onChange={(e) => setNewMenuItem({ ...newMenuItem, cena: Number(e.target.value) })}
                   className="w-full p-2 border rounded-md"
                   required
-                  min={0}
+                  min={1}
                 />
                 <input
                   type="text"
@@ -502,7 +507,7 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={isProcessing}
-                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md disabled:opacity-50"
+                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md disabled:opacity-50 transition-colors"
                 >
                   Přidat položku
                 </button>
@@ -532,7 +537,7 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={isProcessing}
-                  className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-md disabled:opacity-50"
+                  className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-md disabled:opacity-50 transition-colors"
                 >
                   Přidat den
                 </button>

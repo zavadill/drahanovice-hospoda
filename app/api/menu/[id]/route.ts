@@ -1,32 +1,39 @@
-import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../auth/[...nextauth]/route";
+import prisma from "@/lib/prisma";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
-  const session = await getServerSession();
-
-  if (!session || !session.user || session.user.email !== process.env.ADMIN_EMAIL) {
-    return new Response("Unauthorized", { status: 401 });
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse("Unauthorized", { status: 401 });
   }
 
   const id = parseInt(params.id, 10);
-  const data = await req.json();
+  if (isNaN(id)) {
+      return new NextResponse("Invalid ID format", { status: 400 });
+  }
 
-  if (data.action === "update") {
-    try {
-      const updated = await prisma.menuData.update({ where: { id }, data: data.payload });
-      return new Response(JSON.stringify(updated), { status: 200 });
-    } catch (error) {
-      return new Response("Update error", { status: 500 });
+  try {
+    const body = await request.json();
+    const { action, payload } = body;
+
+    if (action === "update") {
+      const updatedItem = await prisma.menuData.update({
+        where: { id },
+        data: payload,
+      });
+      return NextResponse.json(updatedItem);
+    } else if (action === "delete") {
+      await prisma.menuData.delete({
+        where: { id },
+      });
+      return new NextResponse(null, { status: 204 }); // No Content
+    } else {
+      return new NextResponse("Invalid action specified", { status: 400 });
     }
-  } else if (data.action === "delete") {
-    try {
-      await prisma.menuData.delete({ where: { id } });
-      return new Response(null, { status: 204 });
-    } catch (error) {
-      return new Response("Delete error", { status: 500 });
-    }
-  } else {
-    return new Response("Invalid action", { status: 400 });
+  } catch (error) {
+    console.error(`Error processing action for menu item ${id}:`, error);
+    return new NextResponse(`Error processing request for menu item ${id}`, { status: 500 });
   }
 }
