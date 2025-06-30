@@ -1,9 +1,15 @@
+// app/api/menu/[id]/route.ts
+
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+// Používáme POST pro úpravu i mazání
+export async function POST(request: Request, context: { params: { id: string } }) {
+  // Získání parametrů ze správného `context` objektu
+  const { params } = context;
+
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -28,7 +34,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       await prisma.menuData.delete({
         where: { id },
       });
-      return new NextResponse(null, { status: 204 }); // No Content
+      return new NextResponse(null, { status: 204 });
     } else {
       return new NextResponse("Invalid action specified", { status: 400 });
     }

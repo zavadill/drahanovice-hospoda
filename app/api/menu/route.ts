@@ -1,7 +1,9 @@
+// app/api/menu/route.ts
+
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma"; // Importujte si centralizovaného klienta
+import prisma from "@/lib/prisma";
 import { MenuData } from "@prisma/client";
 
 // Získání všech položek menu (veřejně dostupné)

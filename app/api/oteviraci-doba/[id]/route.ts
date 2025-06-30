@@ -1,11 +1,15 @@
-// File: app/api/oteviraci-doba/[id]/route.ts
+// app/api/oteviraci-doba/[id]/route.ts
 
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+// Používáme POST pro úpravu i mazání
+export async function POST(request: Request, context: { params: { id: string } }) {
+  // Získání parametrů ze správného `context` objektu
+  const { params } = context;
+
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -13,7 +17,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
   const id = parseInt(params.id, 10);
   if (isNaN(id)) {
-    return new NextResponse("Invalid ID format", { status: 400 });
+      return new NextResponse("Invalid ID format", { status: 400 });
   }
 
   try {
@@ -21,11 +25,11 @@ export async function POST(request: Request, { params }: { params: { id: string 
     const { action, payload } = body;
 
     if (action === "update") {
-      const updated = await prisma.oteviraciDoba.update({
+      const updatedDay = await prisma.oteviraciDoba.update({
         where: { id },
         data: payload,
       });
-      return NextResponse.json(updated);
+      return NextResponse.json(updatedDay);
     } else if (action === "delete") {
       await prisma.oteviraciDoba.delete({
         where: { id },
@@ -35,7 +39,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return new NextResponse("Invalid action specified", { status: 400 });
     }
   } catch (error) {
-    console.error(`Error processing action for opening hour ${id}:`, error);
-    return new NextResponse(`Error processing request for opening hour ${id}`, { status: 500 });
+    console.error(`Error processing action for opening day ${id}:`, error);
+    return new NextResponse(`Error processing request for opening day ${id}`, { status: 500 });
   }
 }

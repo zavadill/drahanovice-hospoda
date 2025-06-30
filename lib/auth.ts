@@ -1,7 +1,8 @@
+// lib/auth.ts
+
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-// Zde je celá vaše konfigurace, ale nyní je v samostatném souboru a je správně exportována
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -10,7 +11,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const adminEmail = process.env.ADMIN_EMAIL;
         const adminPassword = process.env.ADMIN_PASSWORD;
 
