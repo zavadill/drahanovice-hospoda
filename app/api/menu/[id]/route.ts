@@ -1,13 +1,13 @@
-// app/api/menu/[id]/route.ts
+// app/api/menu/[id]/route.ts (FINÁLNÍ OPRAVENÁ VERZE)
 
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-// Používáme POST pro úpravu i mazání
+// Toto je správná hlavička funkce pro dynamickou route v Next.js
 export async function POST(request: Request, context: { params: { id: string } }) {
-  // Získání parametrů ze správného `context` objektu
+  // `params` musíme získat z `context` objektu
   const { params } = context;
 
   const session = await getServerSession(authOptions);
