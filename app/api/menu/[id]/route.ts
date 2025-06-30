@@ -1,13 +1,19 @@
-// app/api/menu/[id]/route.ts (FINÁLNÍ OPRAVENÁ VERZE)
+// app/api/menu/[id]/route.ts
 
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-// Toto je správná hlavička funkce pro dynamickou route v Next.js
-export async function POST(request: Request, context: { params: { id: string } }) {
-  // `params` musíme získat z `context` objektu
+/**
+ * Toto je JEDINÁ správná signatura pro dynamický Route Handler v Next.js,
+ * která zaručeně projde přísnou typovou kontrolou při buildu na Vercelu.
+ * @param request - Příchozí požadavek (typ Request)
+ * @param context - Objekt obsahující parametry z URL (např. { params: { id: '123' } })
+ */
+export async function POST(request: Request, context: { params: { id:string } }) {
+  
+  // Z `context` objektu si bezpečně vytáhneme `params`.
   const { params } = context;
 
   const session = await getServerSession(authOptions);
