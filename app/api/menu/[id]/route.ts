@@ -1,51 +1,112 @@
-// app/api/menu/[id]/route.ts
+// File: app/api/menu/[id]/route.ts
 
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+
+// This is a placeholder for your actual database logic.
+// Replace with your database client (e.g., Prisma, Drizzle, MongoDB driver).
+const db = {
+  menu: {
+    findUnique: async (id: string) => { /*... find item in db... */ return { id, name: 'Example Item', price: 9.99 }; },
+    update: async (id: string, data: { name?: string; price?: number }) => { /*... update item in db... */ return { id,...data }; },
+    delete: async (id:string) => { /*... delete item from db... */ return { id }; },
+  },
+};
+
+// Define a schema for validating the incoming request body for PUT requests.
+// This ensures type safety and that only expected fields are processed.
+const updateMenuSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters long.").optional(),
+  price: z.number().positive("Price must be a positive number.").optional(),
+}).strict(); //.strict() ensures no unknown fields are allowed.
+
+// This line is crucial for Vercel.
+// It tells Next.js to treat this route as fully dynamic,
+// ensuring it's executed as a serverless function on every request.
+export const dynamic = 'force-dynamic';
 
 /**
- * Toto je JEDINÁ správná signatura pro dynamický Route Handler v Next.js,
- * která zaručeně projde přísnou typovou kontrolou při buildu na Vercelu.
- * @param request - Příchozí požadavek (typ Request)
- * @param context - Objekt obsahující parametry z URL (např. { params: { id: '123' } })
+ * Handles GET requests to /api/menu/[id]
+ * Fetches a single menu item by its ID.
  */
-export async function POST(request: Request, context: { params: { id:string } }) {
-  
-  // Z `context` objektu si bezpečně vytáhneme `params`.
-  const { params } = context;
-
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
-
-  const id = parseInt(params.id, 10);
-  if (isNaN(id)) {
-      return new NextResponse("Invalid ID format", { status: 400 });
-  }
-
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const body = await request.json();
-    const { action, payload } = body;
+    const id = params.id; // Correctly access the dynamic 'id' parameter.
 
-    if (action === "update") {
-      const updatedItem = await prisma.menuData.update({
-        where: { id },
-        data: payload,
-      });
-      return NextResponse.json(updatedItem);
-    } else if (action === "delete") {
-      await prisma.menuData.delete({
-        where: { id },
-      });
-      return new NextResponse(null, { status: 204 });
-    } else {
-      return new NextResponse("Invalid action specified", { status: 400 });
+    const menuItem = await db.menu.findUnique(id);
+
+    if (!menuItem) {
+      return NextResponse.json(
+        { message: 'Menu item not found' },
+        { status: 404 }
+      );
     }
+
+    return NextResponse.json(menuItem, { status: 200 });
   } catch (error) {
-    console.error(`Error processing action for menu item ${id}:`, error);
-    return new NextResponse(`Error processing request for menu item ${id}`, { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal Server Error', error },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * Handles PUT requests to /api/menu/[id]
+ * Updates an existing menu item.
+ */
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = params.id; // Correctly access the dynamic 'id' parameter.
+    const body = await request.json(); // Correctly parse the JSON body from the request.
+
+    // Validate the request body against the Zod schema.
+    const validation = updateMenuSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        { message: "Invalid request body", errors: validation.error.errors },
+        { status: 400 }
+      );
+    }
+
+    const updatedMenuItem = await db.menu.update(id, validation.data);
+
+    return NextResponse.json(updatedMenuItem, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: 'Internal Server Error', error },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * Handles DELETE requests to /api/menu/[id]
+ * Deletes a menu item by its ID.
+ */
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = params.id; // Correctly access the dynamic 'id' parameter.
+
+    await db.menu.delete(id);
+
+    return NextResponse.json(
+      { message: 'Menu item deleted successfully' },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: 'Internal Server Error', error },
+      { status: 500 }
+    );
   }
 }

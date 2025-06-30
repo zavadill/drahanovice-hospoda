@@ -1,39 +1,65 @@
-// app/api/menu/route.ts
+// File: app/api/menu/route.ts
 
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
-import { MenuData } from "@prisma/client";
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
-// Získání všech položek menu (veřejně dostupné)
-export async function GET() {
+// Placeholder for database logic.
+const db = {
+  menu: {
+    findMany: async () => { /*... find all items in db... */ return [{ id: '1', name: 'Item 1', price: 10 }]; },
+    create: async (data: { name: string; price: number }) => { /*... create item in db... */ return { id: '2',...data }; },
+  },
+};
+
+// Define a schema for creating a new menu item.
+// Note that fields are not optional here.
+const createMenuSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters long."),
+  price: z.number().positive("Price must be a positive number."),
+}).strict();
+
+export const dynamic = 'force-dynamic';
+
+/**
+ * Handles GET requests to /api/menu
+ * Fetches all menu items.
+ */
+export async function GET(request: Request) {
   try {
-    const menu = await prisma.menuData.findMany();
-    return NextResponse.json(menu);
+    const menuItems = await db.menu.findMany();
+    return NextResponse.json(menuItems, { status: 200 });
   } catch (error) {
-    console.error("Error fetching menu data:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal Server Error', error },
+      { status: 500 }
+    );
   }
 }
 
-// Přidání nové položky (vyžaduje přihlášení)
+/**
+ * Handles POST requests to /api/menu
+ * Creates a new menu item.
+ */
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
-
   try {
-    const body = (await request.json()) as Omit<MenuData, "id">;
-    const newItem = await prisma.menuData.create({
-      data: {
-        ...body
-      },
-    });
-    return NextResponse.json(newItem, { status: 201 });
+    const body = await request.json();
+
+    // Validate the incoming data.
+    const validation = createMenuSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        { message: "Invalid request body", errors: validation.error.errors },
+        { status: 400 }
+      );
+    }
+
+    const newMenuItem = await db.menu.create(validation.data);
+
+    return NextResponse.json(newMenuItem, { status: 201 }); // 201 Created
   } catch (error) {
-    console.error("Error creating menu item:", error);
-    return new NextResponse("Error creating menu item", { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal Server Error', error },
+      { status: 500 }
+    );
   }
 }
