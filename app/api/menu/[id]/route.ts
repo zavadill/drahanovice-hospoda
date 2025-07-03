@@ -1,13 +1,22 @@
 // app/api/menu/[id]/route.ts
-import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server'; // Importujeme NextResponse
 import prisma from '@/lib/prisma';
 
-// POST /api/menu/[id] - Zpracování operací aktualizace nebo smazání pro konkrétní položku menu
-export async function POST(request: Request, context: { params: { id: string } }) { // Oprava typu argumentu 'context'
-  const id = parseInt(context.params.id); // Přístup k ID přes context.params.id
+// Definice typu pro parametry routy
+type Params = {
+  id: string;
+};
+
+// Vždy, když používáte dynamické routy, druhý argument je objekt 'context'
+// Zde mu dáváme explicitní typ pro jistotu.
+export async function POST(
+  request: Request, // Standardní Request objekt
+  context: { params: Params } // Typování pro kontext, který obsahuje params
+) {
+  const id = parseInt(context.params.id); // Přistupujeme k ID přes context.params.id
 
   if (isNaN(id)) {
-    return NextResponse.json({ message: 'Bylo zadáno neplatné ID.' }, { status: 400 });
+    return NextResponse.json({ message: 'Bylo zadáno neplatné ID. ID musí být číslo.' }, { status: 400 });
   }
 
   try {
@@ -15,33 +24,42 @@ export async function POST(request: Request, context: { params: { id: string } }
     const { action, payload } = body;
 
     if (action === 'update' && payload) {
+      // Před aktualizací si ověříme, zda položka existuje
+      const existingItem = await prisma.menuData.findUnique({ where: { id: id } });
+      if (!existingItem) {
+        return NextResponse.json({ message: 'Položka menu nebyla nalezena pro aktualizaci.' }, { status: 404 });
+      }
+
       const updatedMenuItem = await prisma.menuData.update({
         where: { id: id },
         data: {
           nazev: payload.nazev,
           popis: payload.popis,
-          cena: parseInt(payload.cena),
+          cena: parseInt(payload.cena), // Zajistíme, že cena je číslo
           alergeny: payload.alergeny,
           gram: payload.gram,
         },
       });
       return NextResponse.json(updatedMenuItem, { status: 200 });
     } else if (action === 'delete') {
+      // Před smazáním si ověříme, zda položka existuje
+      const existingItem = await prisma.menuData.findUnique({ where: { id: id } });
+      if (!existingItem) {
+        return NextResponse.json({ message: 'Položka menu nebyla nalezena pro smazání.' }, { status: 404 });
+      }
+
       await prisma.menuData.delete({
         where: { id: id },
       });
-      return NextResponse.json({ message: 'Položka menu byla smazána.' }, { status: 200 });
+      return NextResponse.json({ message: 'Položka menu byla úspěšně smazána.' }, { status: 200 });
     } else {
-      return NextResponse.json({ message: 'Neplatná akce nebo chybějící data.' }, { status: 400 });
+      return NextResponse.json({ message: 'Neplatná akce nebo chybějící data (payload).' }, { status: 400 });
     }
-  } catch (error: unknown) { // Oprava typu chyby
-    console.error(`Chyba při zpracování položky menu ${id}:`, error);
+  } catch (error: unknown) { // Zajištění správného typování chyby
+    console.error(`Chyba při zpracování položky menu s ID ${id}:`, error);
     const errorMessage = error instanceof Error ? error.message : 'Nastala neznámá chyba.';
-    if (errorMessage.includes('Record to update not found') || errorMessage.includes('Record to delete not found')) {
-      return NextResponse.json({ message: 'Položka menu nebyla nalezena.' }, { status: 404 });
-    }
     return NextResponse.json(
-      { message: `Chyba při zpracování položky menu ${id}`, error: errorMessage },
+      { message: `Chyba serveru při zpracování položky menu s ID ${id}`, error: errorMessage },
       { status: 500 }
     );
   }
