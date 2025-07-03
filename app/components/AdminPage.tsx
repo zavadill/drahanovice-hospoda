@@ -1,16 +1,17 @@
+// app/components/AdminPage.tsx
 "use client";
 
 import React, { useEffect, useState, useMemo, FC, FormEvent } from "react";
 import { Pencil, Trash2, Save, X, LoaderCircle } from "lucide-react";
 
-// --- TYPY (beze změny) ---
+// --- TYPY ---
 type MenuItem = {
   id: number;
   kategorie: string;
   nazev: string;
-  popis: string;
+  popis: string | null; // Může být null
   cena: number;
-  alergeny: string;
+  alergeny: string | null; // Může být null
   gram: string;
 };
 
@@ -106,7 +107,7 @@ const MenuItemRow: FC<{
           placeholder="Název"
         />
         <input
-          value={editedItem.popis}
+          value={editedItem.popis || ''} // Handle null for popis
           onChange={(e) => setEditedItem({ ...editedItem, popis: e.target.value })}
           className="p-2 border rounded col-span-2 w-full md:w-auto"
           placeholder="Popis"
@@ -126,6 +127,12 @@ const MenuItemRow: FC<{
             placeholder="Gramáž"
           />
         </div>
+        <input
+          value={editedItem.alergeny || ''} // Handle null for alergeny
+          onChange={(e) => setEditedItem({ ...editedItem, alergeny: e.target.value })}
+          className="p-2 border rounded col-span-2 w-full md:w-auto"
+          placeholder="Alergeny"
+        />
         <div className="flex items-center gap-2 justify-end w-full md:w-auto mt-2 md:mt-0">
           <button
             onClick={handleSave}
@@ -154,6 +161,7 @@ const MenuItemRow: FC<{
         <span className="font-bold">{item.cena} Kč</span>
         <span className="text-gray-500">{item.gram}</span>
       </div>
+      <div className="text-sm text-gray-500 w-full md:w-auto">{item.alergeny}</div> {/* Display alergeny */}
       <div className="flex items-center gap-2 justify-end w-full md:w-auto mt-2 md:mt-0">
         <button
           onClick={() => setIsEditing(true)}
@@ -323,21 +331,18 @@ export default function AdminPage() {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const handleApiCall = async (apiCall: () => Promise<Response>, successMessage: string, errorMessage: string) => {
     setIsProcessing(true);
     try {
       const res = await apiCall();
       if (!res.ok) {
-        // Zkusíme získat konkrétní chybu z těla odpovědi API
         const errorData = await res.text();
-        // Pokud API vrátilo text, zobrazíme ho, jinak naši obecnou zprávu
         throw new Error(errorData || errorMessage);
       }
       showNotification(successMessage, "success");
       await fetchData();
     } catch (error) {
-      // Zobrazíme chybu, ať už přišla z `throw new Error` nebo odjinud
       showNotification(error instanceof Error ? error.message : errorMessage, "error");
     } finally {
       setIsProcessing(false);
@@ -367,9 +372,9 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/menu/${id}`, {
-          method: "POST", // Používáme POST
+          method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "update", payload: updated }), // Posíláme akci a data
+          body: JSON.stringify({ action: "update", payload: updated }),
         }),
       "Položka menu byla aktualizována.",
       "Chyba při aktualizaci položky menu."
@@ -380,9 +385,9 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/menu/${id}`, {
-          method: "POST", // Používáme POST
+          method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "delete" }), // Posíláme akci
+          body: JSON.stringify({ action: "delete" }),
         }),
       "Položka menu byla smazána.",
       "Chyba při mazání položky menu."
@@ -412,7 +417,7 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/oteviraci-doba/${id}`, {
-          method: "POST", // Používáme POST
+          method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "update", payload: updated }),
         }),
@@ -425,7 +430,7 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/oteviraci-doba/${id}`, {
-          method: "POST", // Používáme POST
+          method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "delete" }),
         }),
@@ -443,7 +448,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8 mt-16"> {/* Upravil jsem mt-17 na mt-16, což je běžnější hodnota */}
+    <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8 mt-16">
       <NotificationBanner notification={notification} onDismiss={() => setNotification(null)} />
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">Admin Panel</h1>
@@ -477,7 +482,7 @@ export default function AdminPage() {
                 <input
                   type="text"
                   placeholder="Popis"
-                  value={newMenuItem.popis}
+                  value={newMenuItem.popis || ''}
                   onChange={(e) => setNewMenuItem({ ...newMenuItem, popis: e.target.value })}
                   className="w-full p-2 border rounded-md"
                 />
@@ -493,7 +498,7 @@ export default function AdminPage() {
                 <input
                   type="text"
                   placeholder="Alergeny"
-                  value={newMenuItem.alergeny}
+                  value={newMenuItem.alergeny || ''}
                   onChange={(e) => setNewMenuItem({ ...newMenuItem, alergeny: e.target.value })}
                   className="w-full p-2 border rounded-md"
                 />

@@ -2,30 +2,31 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// GET /api/oteviraci-doba - Fetch all opening hours
+// GET /api/oteviraci-doba - Získání všech záznamů otevírací doby
 export async function GET() {
   try {
     const oteviraciDoba = await prisma.oteviraciDoba.findMany({
       orderBy: {
-        id: 'asc', // Or based on your desired order
+        id: 'asc',
       },
     });
     return NextResponse.json(oteviraciDoba, { status: 200 });
-  } catch (error) {
-    console.error('Error fetching opening hours:', error);
+  } catch (error: unknown) { // Oprava typu chyby
+    console.error('Chyba při načítání otevírací doby:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Nastala neznámá chyba.';
     return NextResponse.json(
-      { message: 'Failed to fetch opening hours', error: (error as Error).message },
+      { message: 'Nepodařilo se načíst otevírací dobu', error: errorMessage },
       { status: 500 }
     );
   }
 }
 
-// POST /api/oteviraci-doba - Create a new opening hour entry
+// POST /api/oteviraci-doba - Vytvoření nového záznamu otevírací doby
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     if (!body.den || !body.cas) {
-      return NextResponse.json({ message: 'Missing required fields: den or cas' }, { status: 400 });
+      return NextResponse.json({ message: 'Chybí povinná pole: den nebo čas' }, { status: 400 });
     }
 
     const newOteviraciDen = await prisma.oteviraciDoba.create({
@@ -35,10 +36,11 @@ export async function POST(request: Request) {
       },
     });
     return NextResponse.json(newOteviraciDen, { status: 201 });
-  } catch (error) {
-    console.error('Error creating opening hour entry:', error);
+  } catch (error: unknown) { // Oprava typu chyby
+    console.error('Chyba při vytváření záznamu otevírací doby:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Nastala neznámá chyba.';
     return NextResponse.json(
-      { message: 'Failed to create opening hour entry', error: (error as Error).message },
+      { message: 'Nepodařilo se vytvořit záznam otevírací doby', error: errorMessage },
       { status: 500 }
     );
   }
