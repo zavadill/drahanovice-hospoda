@@ -1,64 +1,54 @@
-// File: app/api/menu/route.ts
-
+// app/api/menu/route.ts
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
+import prisma from '@/lib/prisma'; // Adjust the path if necessary
 
-// Placeholder for database logic.
-const db = {
-  menu: {
-    findMany: async () => { /*... find all items in db... */ return [{ id: '1', name: 'Item 1', price: 10 }]; },
-    create: async (data: { name: string; price: number }) => { /*... create item in db... */ return { id: '2',...data }; },
-  },
-};
-
-// Define a schema for creating a new menu item.
-// Note that fields are not optional here.
-const createMenuSchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters long."),
-  price: z.number().positive("Price must be a positive number."),
-}).strict();
-
-export const dynamic = 'force-dynamic';
-
-/**
- * Handles GET requests to /api/menu
- * Fetches all menu items.
- */
-export async function GET(request: Request) {
+// GET /api/menu - Fetch all menu items
+export async function GET() {
   try {
-    const menuItems = await db.menu.findMany();
+    const menuItems = await prisma.menuData.findMany({
+      orderBy: {
+        id: 'asc', // Or by 'kategorie' if you prefer grouping from the DB
+      },
+    });
     return NextResponse.json(menuItems, { status: 200 });
   } catch (error) {
+    console.error('Error fetching menu items:', error);
     return NextResponse.json(
-      { message: 'Internal Server Error', error },
+      { message: 'Failed to fetch menu items', error: (error as Error).message },
       { status: 500 }
     );
   }
 }
 
-/**
- * Handles POST requests to /api/menu
- * Creates a new menu item.
- */
+// POST /api/menu - Create a new menu item
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-
-    // Validate the incoming data.
-    const validation = createMenuSchema.safeParse(body);
-    if (!validation.success) {
-      return NextResponse.json(
-        { message: "Invalid request body", errors: validation.error.errors },
-        { status: 400 }
-      );
+    // Validate required fields (based on your schema, nazev, cena, kategorie are crucial)
+    if (!body.nazev || !body.cena || !body.kategorie) {
+      return NextResponse.json({ message: 'Missing required fields: nazev, cena, or kategorie' }, { status: 400 });
+    }
+    // Ensure 'kategorie' is a valid enum value
+    const validCategories = ["PREDKRMY", "POLEVKY", "HLAVNI_JIDLA", "DEZERTY", "NAPOJE"];
+    if (!validCategories.includes(body.kategorie)) {
+      return NextResponse.json({ message: `Invalid kategorie value: ${body.kategorie}` }, { status: 400 });
     }
 
-    const newMenuItem = await db.menu.create(validation.data);
-
-    return NextResponse.json(newMenuItem, { status: 201 }); // 201 Created
+    const newMenuItem = await prisma.menuData.create({
+      data: {
+        nazev: body.nazev,
+        popis: body.popis || null, // Allow null if not provided
+        cena: parseInt(body.cena), // Ensure cena is an integer
+        alergeny: body.alergeny || null, // Allow null if not provided
+        gram: body.gram,
+        kategorie: body.kategorie,
+      },
+    });
+    return NextResponse.json(newMenuItem, { status: 201 });
   } catch (error) {
+    console.error('Error creating menu item:', error);
     return NextResponse.json(
-      { message: 'Internal Server Error', error },
+      { message: 'Failed to create menu item', error: (error as Error).message },
       { status: 500 }
     );
   }

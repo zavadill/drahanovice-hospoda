@@ -1,11 +1,9 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -27,9 +25,8 @@ model MenuData {
   gram      String
 }
 
-// Váš stávající model
 model OteviraciDoba {
-  id    Int    @id @default(autoincrement())
-  den   String
-  cas   String
+  id   Int    @id @default(autoincrement())
+  den  String
+  cas  String
 }
