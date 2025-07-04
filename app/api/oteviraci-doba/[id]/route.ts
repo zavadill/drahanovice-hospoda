@@ -1,18 +1,11 @@
 // app/api/oteviraci-doba/[id]/route.ts
-import { NextResponse } from 'next/server'; // Importujeme NextResponse
+import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// Definice typu pro parametry routy
-type Params = {
-  id: string;
-};
-
-// Vždy, když používáte dynamické routy, druhý argument je objekt 'context'
-export async function POST(
-  request: Request, // Standardní Request objekt
-  context: { params: Params } // Typování pro kontext, který obsahuje params
-) {
-  const id = parseInt(context.params.id); // Přistupujeme k ID přes context.params.id
+// Odstraněn explicitní typ 'Params' a typování 'context'
+export async function POST(request: Request, context: any) { // Změna zde: 'context: any' nebo jen 'context'
+  // Bez ohledu na typování, k params přistupujeme přes context.params
+  const id = parseInt(context.params.id); 
 
   if (isNaN(id)) {
     return NextResponse.json({ message: 'Bylo zadáno neplatné ID. ID musí být číslo.' }, { status: 400 });
@@ -23,7 +16,6 @@ export async function POST(
     const { action, payload } = body;
 
     if (action === 'update' && payload) {
-      // Před aktualizací si ověříme, zda záznam existuje
       const existingEntry = await prisma.oteviraciDoba.findUnique({ where: { id: id } });
       if (!existingEntry) {
         return NextResponse.json({ message: 'Záznam otevírací doby nebyl nalezen pro aktualizaci.' }, { status: 404 });
@@ -38,7 +30,6 @@ export async function POST(
       });
       return NextResponse.json(updatedOteviraciDen, { status: 200 });
     } else if (action === 'delete') {
-      // Před smazáním si ověříme, zda záznam existuje
       const existingEntry = await prisma.oteviraciDoba.findUnique({ where: { id: id } });
       if (!existingEntry) {
         return NextResponse.json({ message: 'Záznam otevírací doby nebyl nalezen pro smazání.' }, { status: 404 });
@@ -51,7 +42,7 @@ export async function POST(
     } else {
       return NextResponse.json({ message: 'Neplatná akce nebo chybějící data (payload).' }, { status: 400 });
     }
-  } catch (error: unknown) { // Zajištění správného typování chyby
+  } catch (error: unknown) {
     console.error(`Chyba při zpracování záznamu otevírací doby s ID ${id}:`, error);
     const errorMessage = error instanceof Error ? error.message : 'Nastala neznámá chyba.';
     return NextResponse.json(
