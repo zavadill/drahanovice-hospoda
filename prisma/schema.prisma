@@ -20,7 +20,7 @@ model MenuData {
   kategorie Kategorie
   nazev     String
   popis     String?
-  cena      Int
+  cena      Int?
   alergeny  String?
   gram      String
 }

@@ -10,7 +10,7 @@ type MenuItem = {
   kategorie: string;
   nazev: string;
   popis: string | null; // Může být null
-  cena: number;
+  cena: number | null; // <--- ZMĚNA: Cena může být nyní číslo NEBO null
   alergeny: string | null; // Může být null
   gram: string;
 };
@@ -82,7 +82,11 @@ const MenuItemRow: FC<{
   const handleSave = async () => {
     // Odstraníme 'id' a 'kategorie' z odesílaných dat, pokud je nechceme měnit v řádku
     const { id, kategorie, ...updateData } = editedItem;
-    await onUpdate(item.id, updateData);
+
+    // Převod cena na number nebo null před odesláním
+    const finalPrice = editedItem.cena === null || editedItem.cena === undefined ? null : Number(editedItem.cena);
+    
+    await onUpdate(item.id, { ...updateData, cena: finalPrice }); // <--- ZMĚNA: Ujistíme se, že cena je správný typ pro DB
     setIsEditing(false);
   };
 
@@ -115,10 +119,12 @@ const MenuItemRow: FC<{
         <div className="flex gap-2 w-full md:w-auto">
           <input
             type="number"
-            value={editedItem.cena}
-            onChange={(e) => setEditedItem({ ...editedItem, cena: Number(e.target.value) })}
+            value={editedItem.cena === null ? '' : editedItem.cena} // <--- ZMĚNA: Zobrazení prázdného stringu pro null
+            onChange={(e) => setEditedItem({ ...editedItem, cena: e.target.value === '' ? null : Number(e.target.value) })} // <--- ZMĚNA: Konverze na null/number
             className="p-2 border rounded w-24 flex-shrink-0"
             placeholder="Cena"
+            // required - odstraněno, pokud cena může být nedefinovaná na začátku
+            // min={1} - odstraněno, pokud cena může být 0 nebo nedefinovaná
           />
           <input
             value={editedItem.gram}
@@ -284,7 +290,7 @@ export default function AdminPage() {
     kategorie: "PREDKRMY",
     nazev: "",
     popis: "",
-    cena: 0,
+    cena: null, // <--- ZMĚNA: Výchozí cena je nyní null
     alergeny: "",
     gram: "",
   });
@@ -351,8 +357,9 @@ export default function AdminPage() {
 
   const addMenuItem = async (e: FormEvent) => {
     e.preventDefault();
-    if (!newMenuItem.nazev.trim() || newMenuItem.cena <= 0) {
-      showNotification("Název a cena musí být vyplněny.", "error");
+    // <--- ZMĚNA: Validace pro null/undefined ceny
+    if (!newMenuItem.nazev.trim() || newMenuItem.cena === null || newMenuItem.cena === undefined || newMenuItem.cena <= 0) {
+      showNotification("Název a cena (větší než 0) musí být vyplněny.", "error");
       return;
     }
     await handleApiCall(
@@ -365,7 +372,7 @@ export default function AdminPage() {
       "Položka menu byla úspěšně přidána.",
       "Chyba při přidávání položky menu."
     );
-    setNewMenuItem({ kategorie: "PREDKRMY", nazev: "", popis: "", cena: 0, alergeny: "", gram: "" });
+    setNewMenuItem({ kategorie: "PREDKRMY", nazev: "", popis: "", cena: null, alergeny: "", gram: "" }); // <--- ZMĚNA: Po úspěchu reset na null
   };
 
   const updateMenuItem = async (id: number, updated: Partial<MenuItem>) => {
@@ -489,11 +496,11 @@ export default function AdminPage() {
                 <input
                   type="number"
                   placeholder="Cena"
-                  value={newMenuItem.cena}
-                  onChange={(e) => setNewMenuItem({ ...newMenuItem, cena: Number(e.target.value) })}
+                  value={newMenuItem.cena === null ? '' : newMenuItem.cena} // <--- ZMĚNA: Zobrazení prázdného stringu pro null
+                  onChange={(e) => setNewMenuItem({ ...newMenuItem, cena: e.target.value === '' ? null : Number(e.target.value) })} // <--- ZMĚNA: Konverze na null/number
                   className="w-full p-2 border rounded-md"
-                  required
-                  min={1}
+                  required // <--- ZMĚNA: Ponecháno required, ale s upravenou validací pro null/empty string
+                  min={0} // <--- ZMĚNA: Změněno z 1 na 0, pokud chcete povolit cenu 0. Pro prázdné pole byste musel odstranit.
                 />
                 <input
                   type="text"

@@ -11,7 +11,7 @@ export async function POST(request: Request, context: any) { // Změna zde: 'con
     return NextResponse.json({ message: 'Bylo zadáno neplatné ID. ID musí být číslo.' }, { status: 400 });
   }
 
-  try {
+  try { 
     const body = await request.json();
     const { action, payload } = body;
 
