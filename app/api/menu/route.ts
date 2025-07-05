@@ -1,6 +1,7 @@
 // app/api/menu/route.ts
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { auth } from '@/lib/auth'; // Import auth function
 
 // GET /api/menu - Získání všech položek menu
 export async function GET() {
@@ -11,7 +12,7 @@ export async function GET() {
       },
     });
     return NextResponse.json(menuItems, { status: 200 });
-  } catch (error: unknown) { // Oprava typu chyby
+  } catch (error: unknown) {
     console.error('Chyba při načítání položek menu:', error);
     const errorMessage = error instanceof Error ? error.message : 'Nastala neznámá chyba.';
     return NextResponse.json(
@@ -23,6 +24,12 @@ export async function GET() {
 
 // POST /api/menu - Vytvoření nové položky menu
 export async function POST(request: Request) {
+  const session = await auth(); // Get session for authorization
+
+  if (!session || (session.user as any)?.role !== 'admin') {
+    return NextResponse.json({ message: "Přístup odepřen. Musíte být přihlášeni jako administrátor." }, { status: 403 });
+  }
+
   try {
     const body = await request.json();
     if (!body.nazev || !body.cena || !body.kategorie) {
@@ -45,7 +52,7 @@ export async function POST(request: Request) {
       },
     });
     return NextResponse.json(newMenuItem, { status: 201 });
-  } catch (error: unknown) { // Oprava typu chyby
+  } catch (error: unknown) {
     console.error('Chyba při vytváření položky menu:', error);
     const errorMessage = error instanceof Error ? error.message : 'Nastala neznámá chyba.';
     return NextResponse.json(

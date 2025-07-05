@@ -1,6 +1,7 @@
 // app/api/oteviraci-doba/route.ts
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { auth } from '@/lib/auth'; // Import auth function
 
 // GET /api/oteviraci-doba - Získání všech záznamů otevírací doby
 export async function GET() {
@@ -11,7 +12,7 @@ export async function GET() {
       },
     });
     return NextResponse.json(oteviraciDoba, { status: 200 });
-  } catch (error: unknown) { // Oprava typu chyby
+  } catch (error: unknown) {
     console.error('Chyba při načítání otevírací doby:', error);
     const errorMessage = error instanceof Error ? error.message : 'Nastala neznámá chyba.';
     return NextResponse.json(
@@ -23,6 +24,12 @@ export async function GET() {
 
 // POST /api/oteviraci-doba - Vytvoření nového záznamu otevírací doby
 export async function POST(request: Request) {
+  const session = await auth(); // Get session for authorization
+
+  if (!session || (session.user as any)?.role !== 'admin') {
+    return NextResponse.json({ message: "Přístup odepřen. Musíte být přihlášeni jako administrátor." }, { status: 403 });
+  }
+
   try {
     const body = await request.json();
     if (!body.den || !body.cas) {
@@ -36,7 +43,7 @@ export async function POST(request: Request) {
       },
     });
     return NextResponse.json(newOteviraciDen, { status: 201 });
-  } catch (error: unknown) { // Oprava typu chyby
+  } catch (error: unknown) {
     console.error('Chyba při vytváření záznamu otevírací doby:', error);
     const errorMessage = error instanceof Error ? error.message : 'Nastala neznámá chyba.';
     return NextResponse.json(

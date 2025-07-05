@@ -1,3 +1,4 @@
+// app/login/page.tsx
 "use client";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -11,13 +12,14 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(""); // Reset error message
     const res = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
     if (res?.ok) {
-      router.push("/admin");
+      router.push("/admin"); // Po úspěšném přihlášení přesměrujeme na /admin
     } else {
       setError("Špatné přihlašovací údaje");
     }
@@ -37,6 +39,7 @@ export default function LoginPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 border rounded mb-4"
+          required
         />
         <input
           type="password"
@@ -44,6 +47,7 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full p-2 border rounded mb-4"
+          required
         />
         <button
           type="submit"

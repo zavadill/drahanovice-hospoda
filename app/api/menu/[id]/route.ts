@@ -1,11 +1,16 @@
 // app/api/menu/[id]/route.ts
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { auth } from '@/lib/auth'; // Import auth function
 
-// Odstraněn explicitní typ 'Params' a typování 'context'
-export async function POST(request: Request, context: any) { // Změna zde: 'context: any' nebo jen 'context'
-  // Bez ohledu na typování, k params přistupujeme přes context.params
-  const id = parseInt(context.params.id); 
+export async function POST(request: Request, context: any) {
+  const session = await auth(); // Get session for authorization
+
+  if (!session || (session.user as any)?.role !== 'admin') {
+    return NextResponse.json({ message: "Přístup odepřen. Musíte být přihlášeni jako administrátor." }, { status: 403 });
+  }
+
+  const id = parseInt(context.params.id);
 
   if (isNaN(id)) {
     return NextResponse.json({ message: 'Bylo zadáno neplatné ID. ID musí být číslo.' }, { status: 400 });

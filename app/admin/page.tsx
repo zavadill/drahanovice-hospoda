@@ -1,15 +1,16 @@
 // app/admin/page.tsx
-import { getServerSession } from "next-auth";
-import AdminPage from "../components/AdminPage"; // Ujistěte se, že cesta je správná
+import { auth } from "@/lib/auth"; // Upravená cesta k auth
 import { redirect } from "next/navigation";
+import AdminPage from "../components/AdminPage";
 
 export default async function AdminProtectedPage() {
-  const session = await getServerSession();
+  const session = await auth();
 
-  // Pokud není relace, přesměruj na přihlašovací stránku
-  if (!session) {
-    redirect("/login");
+  // Middleware by mělo uživatele přesměrovat, pokud není přihlášen nebo nemá roli 'admin'.
+  // Tato kontrola je zde pro jistotu a pro server-side rendering.
+  if (!session || (session.user as any)?.role !== 'admin') {
+    redirect("/access-denied"); // Přesměrování na stránku "Přístup odepřen"
   }
 
   return <AdminPage />;
-}
+} 

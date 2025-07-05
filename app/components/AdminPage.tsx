@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState, useMemo, FC, FormEvent } from "react";
 import { Pencil, Trash2, Save, X, LoaderCircle } from "lucide-react";
+import { signOut } from "next-auth/react"; // Import signOut function
 
 // --- TYPY ---
 type MenuItem = {
@@ -85,7 +86,7 @@ const MenuItemRow: FC<{
 
     // Převod cena na number nebo null před odesláním
     const finalPrice = editedItem.cena === null || editedItem.cena === undefined ? null : Number(editedItem.cena);
-    
+
     await onUpdate(item.id, { ...updateData, cena: finalPrice }); // <--- ZMĚNA: Ujistíme se, že cena je správný typ pro DB
     setIsEditing(false);
   };
@@ -123,8 +124,8 @@ const MenuItemRow: FC<{
             onChange={(e) => setEditedItem({ ...editedItem, cena: e.target.value === '' ? null : Number(e.target.value) })} // <--- ZMĚNA: Konverze na null/number
             className="p-2 border rounded w-24 flex-shrink-0"
             placeholder="Cena"
-            // required - odstraněno, pokud cena může být nedefinovaná na začátku
-            // min={1} - odstraněno, pokud cena může být 0 nebo nedefinovaná
+          // required - odstraněno, pokud cena může být nedefinovaná na začátku
+          // min={1} - odstraněno, pokud cena může být 0 nebo nedefinovaná
           />
           <input
             value={editedItem.gram}
@@ -343,8 +344,15 @@ export default function AdminPage() {
     try {
       const res = await apiCall();
       if (!res.ok) {
-        const errorData = await res.text();
-        throw new Error(errorData || errorMessage);
+        // Zkusíme parsovat chybovou zprávu z API, pokud je dostupná
+        const errorText = await res.text();
+        let parsedError;
+        try {
+          parsedError = JSON.parse(errorText);
+        } catch (e) {
+          parsedError = { message: errorText };
+        }
+        throw new Error(parsedError.message || errorMessage);
       }
       showNotification(successMessage, "success");
       await fetchData();
@@ -379,7 +387,7 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/menu/${id}`, {
-          method: "POST",
+          method: "POST", // Používáme POST, protože v Next.js Route Handlers to takto máme
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "update", payload: updated }),
         }),
@@ -392,7 +400,7 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/menu/${id}`, {
-          method: "POST",
+          method: "POST", // Používáme POST
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "delete" }),
         }),
@@ -424,7 +432,7 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/oteviraci-doba/${id}`, {
-          method: "POST",
+          method: "POST", // Používáme POST
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "update", payload: updated }),
         }),
@@ -437,7 +445,7 @@ export default function AdminPage() {
     await handleApiCall(
       () =>
         fetch(`/api/oteviraci-doba/${id}`, {
-          method: "POST",
+          method: "POST", // Používáme POST
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "delete" }),
         }),
@@ -458,7 +466,15 @@ export default function AdminPage() {
     <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8 mt-16">
       <NotificationBanner notification={notification} onDismiss={() => setNotification(null)} />
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">Admin Panel</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800">Admin Panel</h1>
+          <button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+          >
+            Odhlásit se
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* LEVÝ SLOUPEC - FORMULÁŘE */}

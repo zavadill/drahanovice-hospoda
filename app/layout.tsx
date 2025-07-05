@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Playfair_Display, Inter } from "next/font/google";
 import ClientReveal from "./components/ClientReveal";
+import { SessionProvider } from "next-auth/react";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -57,11 +58,13 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <body className={`${playfair.variable} ${inter.variable} antialiased font-[family-name:var(--font-inter)]`}>
-        <ClientReveal>
-          <Navbar />
-          {children}
-          <Footer />
-        </ClientReveal>
+        <SessionProvider>
+          <ClientReveal>
+            <Navbar />
+            {children}
+            <Footer />
+          </ClientReveal>
+        </SessionProvider>
       </body>
     </html>
   );
